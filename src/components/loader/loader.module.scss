@@ -1,0 +1,58 @@
+.loader {
+  font-family: DSEGMINI7;
+  font-size: 5rem;
+  color: var(--theme-color);
+  will-change: opacity;
+  width: 100vw;
+  height: 100svh;
+  background: black;
+  user-select: none;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 1;
+  position: fixed;
+
+  .numbers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 3rem;
+
+    .letter {
+      display: block;
+    }
+  }
+
+  @media screen and (width <= 800px) {
+    font-size: 3rem;
+  }
+}
+
+.off {
+  position: absolute;
+  white-space: nowrap;
+  color: var(--theme-color-off);
+  z-index: 1;
+}
+
+.on {
+  display: flex;
+  color: var(--theme-color-on);
+  z-index: 2;
+  -webkit-text-stroke: none;
+  text-shadow: 0 0 .2rem var(--theme-color-on), 0 0 1em var(--theme-color-on), 0 0 0.2em var(--theme-color-on);
+}
+
+.title {
+  display: flex;
+  font-family: DSEGMINI7;
+}
+
+.fourteen {
+  font-family: DSEGMINI14;
+}

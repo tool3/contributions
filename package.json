@@ -1,0 +1,259 @@
+{
+  "name": "polyclock",
+  "version": "1.0.0",
+  "description": "7 segment display inspired 3D mechnical clock",
+  "repository": "https://github.com/tool3/polyclock",
+  "author": "talhayut",
+  "private": true,
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "build:analyze": "cross-env ANALYZE=true yarn build",
+    "postbuild": "next-sitemap",
+    "start": "next start",
+    "lint": "next lint && stylelint '**/*.{css,scss}'",
+    "tsc": "tsc --pretty --noEmit"
+  },
+  "dependencies": {
+    "@bsmnt/scrollytelling": "0.3.3",
+    "@gsap/react": "^2.1.1",
+    "@react-three/drei": "^9.120.5",
+    "@react-three/fiber": "8.17.10",
+    "@react-three/postprocessing": "^2.16.5",
+    "@tanstack/react-query": "^5.32.0",
+    "axios": "^1.7.9",
+    "clsx": "^2.1.1",
+    "file-loader": "^6.2.0",
+    "glslify-loader": "^2.0.0",
+    "gsap": "^3.12.5",
+    "hls.js": "^1.5.8",
+    "howler": "^2.2.4",
+    "just-debounce-it": "^3.2.0",
+    "leva": "^0.9.34",
+    "mousetrap": "1.6.5",
+    "next": "^14.2.3",
+    "postprocessing": "^6.36.6",
+    "r3f-perf": "^7.2.3",
+    "raw-loader": "^4.0.2",
+    "react": "^18.3.1",
+    "react-device-detect": "^2.2.3",
+    "react-dom": "^18.3.1",
+    "react-fast-marquee": "1.6.5",
+    "react-merge-refs": "^2.1.1",
+    "three": "0.171.0",
+    "three-stdlib": "^2.35.7",
+    "url-loader": "^4.1.1",
+    "zod": "^3.23.4",
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^14.2.3",
+    "@next/eslint-plugin-next": "^14.2.3",
+    "@total-typescript/ts-reset": "^0.5.1",
+    "@types/css-font-loading-module": "^0.0.13",
+    "@types/mousetrap": "^1.6.15",
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.7.1",
+    "@typescript-eslint/parser": "^7.7.1",
+    "babel-plugin-optimize-clsx": "^2.6.2",
+    "cross-env": "^7.0.3",
+    "eslint": "8.57.0",
+    "eslint-config-prettier": "8.10.0",
+    "eslint-import-resolver-typescript": "^3.6.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-simple-import-sort": "^12.1.0",
+    "next-sitemap": "^4.2.3",
+    "prettier": "^3.2.5",
+    "sass": "^1.75.0",
+    "stylelint": "^16.4.0",
+    "stylelint-config-standard": "^36.0.0",
+    "stylelint-config-standard-scss": "^13.1.0",
+    "stylelint-prettier": "^5.0.0",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "always",
+    "tabWidth": 2,
+    "printWidth": 80,
+    "trailingComma": "none",
+    "endOfLine": "auto"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "react",
+      "react-hooks",
+      "simple-import-sort",
+      "@typescript-eslint"
+    ],
+    "ignorePatterns": [],
+    "extends": [
+      "eslint:recommended",
+      "plugin:import/recommended",
+      "plugin:import/typescript",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
+      "prettier",
+      "plugin:prettier/recommended",
+      "plugin:@next/next/recommended"
+    ],
+    "env": {
+      "es6": true,
+      "browser": true,
+      "node": true
+    },
+    "rules": {
+      "react/react-in-jsx-scope": 0,
+      "react/display-name": 0,
+      "react/prop-types": 0,
+      "@typescript-eslint/explicit-function-return-type": 0,
+      "@typescript-eslint/explicit-member-accessibility": 0,
+      "@typescript-eslint/indent": 0,
+      "@typescript-eslint/member-delimiter-style": 0,
+      "@typescript-eslint/no-explicit-any": 0,
+      "@typescript-eslint/no-var-requires": 0,
+      "@typescript-eslint/no-use-before-define": 0,
+      "@typescript-eslint/ban-ts-comment": 0,
+      "simple-import-sort/imports": "warn",
+      "simple-import-sort/exports": "warn",
+      "react-hooks/exhaustive-deps": [
+        "warn",
+        {
+          "additionalHooks": "(useIsomorphicLayoutEffect)"
+        }
+      ],
+      "react/no-unescaped-entities": 0,
+      "curly": [
+        "error",
+        "multi-line"
+      ],
+      "react/jsx-no-target-blank": [
+        2,
+        {
+          "allowReferrer": true
+        }
+      ],
+      "@typescript-eslint/no-unused-vars": [
+        2,
+        {
+          "argsIgnorePattern": "^_"
+        }
+      ],
+      "no-console": [
+        1,
+        {
+          "allow": [
+            "warn",
+            "error"
+          ]
+        }
+      ],
+      "prettier/prettier": [
+        "warn",
+        {
+          "endOfLine": "auto"
+        }
+      ],
+      "@typescript-eslint/explicit-module-boundary-types": "off"
+    },
+    "settings": {
+      "import/parsers": {
+        "@typescript-eslint/parser": [
+          ".ts",
+          ".tsx"
+        ]
+      },
+      "import/resolver": {
+        "typescript": {
+          "alwaysTryTypes": true,
+          "project": "."
+        }
+      },
+      "react": {
+        "version": "detect"
+      }
+    }
+  },
+  "stylelint": {
+    "ignoreFiles": [
+      "**/*.{ts,tsx,js,jsx}"
+    ],
+    "extends": [
+      "stylelint-config-standard",
+      "stylelint-config-standard-scss",
+      "stylelint-prettier/recommended"
+    ],
+    "rules": {
+      "scss/at-rule-no-unknown": [
+        true,
+        {
+          "ignoreAtRules": [
+            "tailwind",
+            "layer",
+            "apply",
+            "variants",
+            "responsive",
+            "screen",
+            "include",
+            "for",
+            "mixin",
+            "if",
+            "else",
+            "warn",
+            "return",
+            "function",
+            "use",
+            "each"
+          ]
+        }
+      ],
+      "selector-pseudo-class-no-unknown": [
+        true,
+        {
+          "ignorePseudoClasses": [
+            "global"
+          ]
+        }
+      ],
+      "property-no-unknown": [
+        true,
+        {
+          "ignoreProperties": [
+            "font-named-instance"
+          ]
+        }
+      ],
+      "no-descending-specificity": null,
+      "length-zero-no-unit": null,
+      "alpha-value-notation": null,
+      "selector-id-pattern": null,
+      "selector-class-pattern": null,
+      "property-no-vendor-prefix": null,
+      "value-no-vendor-prefix": null,
+      "scss/no-global-function-names": null,
+      "scss/double-slash-comment-empty-line-before": null
+    }
+  },
+  "overrides": {
+    "leva": {
+      "@radix-ui/react-portal": "1.0.2"
+    }
+  }
+}
