@@ -1,8 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import { Grid, OrbitControls, Text3D } from '@react-three/drei'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
-import { useEffect, useRef } from 'react'
-import { Color, Matrix4 } from 'three'
+import { Color } from 'three'
 
 import Effects from '../mincanvas/effects'
 import CanvasWithModel from '../mincanvas/minicanvas'

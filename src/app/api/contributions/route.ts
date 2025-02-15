@@ -8,7 +8,7 @@ interface Contribution {
 
 export async function GET(
   req: NextRequest,
-  res: NextApiResponse<Contribution[] | { message: string }>
+  _res: NextApiResponse<Contribution[] | { message: string }>
 ) {
   const searchParams = new URL(req.url).searchParams
   const username = searchParams.get('username')
