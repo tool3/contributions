@@ -1,23 +1,16 @@
-import { useLoader } from '@react-three/fiber'
 import {
   Bloom,
   EffectComposer,
-  LUT,
   Scanline,
   Vignette
 } from '@react-three/postprocessing'
 import { folder, useControls } from 'leva'
 import { VignetteTechnique } from 'postprocessing'
-import { LUTCubeLoader } from 'three-stdlib'
 
-import { useDeviceDetect } from '~/ts/hooks/use-device-detect'
 
 export default function Effects() {
-  const { isAndroid } = useDeviceDetect()
   const {
     enabled,
-    lut,
-    lutEnabled,
     bloomEnabled,
     intensity,
     luminanceSmoothing,
@@ -28,42 +21,7 @@ export default function Effects() {
     scanlineEnabled,
     scanlineStrength
   } = useControls('Post Processing', {
-    enabled: true,
-    LUTs: folder(
-      {
-        lutEnabled: !isAndroid,
-        lut: {
-          value: 'FILMIC.CUBE',
-          options: {
-            ARCHIVE: 'ARCHIVE.CUBE',
-            ARTISTRY: 'ARTISTRY.CUBE',
-            BOURBON: 'BOURBON.CUBE',
-            CHEMICAL: 'CHEMICAL.CUBE',
-            CHRONICLE: 'CHRONICLE.CUBE',
-            CLAYTON: 'CLAYTON.CUBE',
-            CONCESSION: 'CONCESSION.CUBE',
-            COUNTRY: 'COUNTRY.CUBE',
-            CUBICLE: 'CUBICLE.CUBE',
-            DANGERFIELD: 'DANGERFIELD.CUBE',
-            DONT_BREATH: 'DONT_BREATH.cube',
-            DUSK: 'DUSK.CUBE',
-            ERA: 'ERA.CUBE',
-            EVEREST: 'EVEREST.CUBE',
-            FILMIC: 'FILMIC.CUBE',
-            GHOST: 'GHOST.CUBE',
-            HALFDOME: 'HALFDOME.CUBE',
-            JOKER: 'JOKER.CUBE',
-            LOS_ANGELES: 'LOS_ANGELES.CUBE',
-            MANHATTAN: 'MANHATTAN.CUBE',
-            OTHERDAY: 'OTHERDAY.CUBE',
-            REMY: 'REMY.CUBE',
-            STRANGERS: 'STRANGERS.CUBE',
-            WISHAWOODS: 'WISHAWOODS.CUBE'
-          }
-        }
-      },
-      { collapsed: true }
-    ),
+    enabled: false,
     Bloom: folder(
       {
         bloomEnabled: true,
@@ -113,8 +71,6 @@ export default function Effects() {
       { collapsed: true }
     )
   })
-  const lutPath = `/textures/LUTs/${lut}`
-  const lutTexture = useLoader(LUTCubeLoader, lutPath)
 
   return enabled ? (
     <EffectComposer multisampling={2} stencilBuffer autoClear>
@@ -138,9 +94,6 @@ export default function Effects() {
       ) : (
         <></>
       )}
-      {lutEnabled ? <LUT lut={lutTexture.texture} /> : <></>}
     </EffectComposer>
   ) : null
 }
-
-useLoader.preload(LUTCubeLoader, '/textures/LUTs/FILMIC.CUBE')

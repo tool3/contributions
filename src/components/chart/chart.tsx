@@ -1,8 +1,11 @@
 /* eslint-disable react/no-unknown-property */
-import { Grid, OrbitControls, Text, Text3D } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+import { Grid, OrbitControls, Text3D } from '@react-three/drei'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
-import { Color } from 'three'
+import { useEffect, useRef } from 'react'
+import { Color, Matrix4 } from 'three'
+
+import Effects from '../mincanvas/effects'
+import CanvasWithModel from '../mincanvas/minicanvas'
 
 interface Contribution {
   date: string
@@ -25,6 +28,23 @@ const getColor = (count: number) => {
   return GITHUB_COLORS[0]
 }
 
+function InstancedBox({ color, height, emissiveIntensity, i, position }) {
+  // const ref = useRef() as any
+  // useEffect(() => {
+  //   ref.current.setMatrixAt(0, new Matrix4())
+  // }, [])
+  return (
+    <mesh key={i} position={position}>
+      <boxGeometry args={[0.8, height, 0.8]} />
+      <meshStandardMaterial
+        color={color}
+        emissive={color}
+        emissiveIntensity={emissiveIntensity}
+      />
+    </mesh>
+  )
+}
+
 const ContributionGrid = ({
   contributions
 }: {
@@ -42,23 +62,19 @@ const ContributionGrid = ({
         const height =
           day.contributionCount > 0 ? day.contributionCount * 0.2 : 0.5
         const emissiveIntensity = Math.min(1, day.contributionCount / 10)
-        return (
-          <mesh
-            key={day.date}
-            position={[
-              (i % cols) + offsetX,
-              height / 2,
-              -Math.floor(i / cols) + offsetZ
-            ]}
-          >
-            <boxGeometry args={[0.8, height, 0.8]} />
-            <meshStandardMaterial
-              color={color}
-              emissive={color}
-              emissiveIntensity={emissiveIntensity}
-            />
-          </mesh>
-        )
+        const position = [
+          (i % cols) + offsetX,
+          height / 2,
+          -Math.floor(i / cols) + offsetZ
+        ]
+        const props = {
+          color,
+          height,
+          emissiveIntensity,
+          i,
+          position
+        }
+        return <InstancedBox key={i} {...props} />
       })}
     </group>
   )
@@ -72,17 +88,7 @@ const ContributionVisualizer = ({
   username: string
 }) => {
   return (
-    <Canvas
-      orthographic
-      camera={{
-        position: [0, 50, 0],
-        zoom: 20,
-        fov: 50
-        // frustumCulled: true,
-        // near: 0.0001
-      }}
-      style={{ height: '100svh', width: '100vw' }}
-    >
+    <CanvasWithModel cameraPosition={[0, 50, 0]}>
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 10, 5]} intensity={1} />
       <OrbitControls
@@ -112,14 +118,15 @@ const ContributionVisualizer = ({
       <ContributionGrid contributions={contributions} />
       <Text3D
         scale={1}
-        position={[0, 0, 5]}
+        position={[0, 0, 6]}
         font={'/fonts/helvetiker_regular.typeface.json'}
         rotation={[-Math.PI / 2, 0, 0]}
       >
         {username}
-        <meshStandardMaterial color="white"  />
+        <meshStandardMaterial color="white" />
       </Text3D>
-    </Canvas>
+      <Effects />
+    </CanvasWithModel>
   )
 }
 

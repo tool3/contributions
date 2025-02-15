@@ -1,3 +1,4 @@
-# shaders
+# contributions
 
-GLSL shaders from threejs journey, with nextjs!
+github contributions in 3D!
+

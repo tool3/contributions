@@ -50,9 +50,7 @@ export default function Page() {
 
   return (
     <div>
-      <div className={s.user}>
-        <User {...props} />
-      </div>
+      <User {...props} />
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
       <ContributionChart username={username} contributions={contributions} />
     </div>

@@ -1,6 +1,8 @@
+import s from './user.module.scss'
+
 export default function User({ handleSubmit, loading, username, setUsername }) {
   return (
-    <>
+    <div className={s.user}>
       <h1>GitHub Contribution Visualization</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -16,6 +18,6 @@ export default function User({ handleSubmit, loading, username, setUsername }) {
           {loading ? 'Loading...' : 'Visualize'}
         </button>
       </form>
-    </>
+    </div>
   )
 }

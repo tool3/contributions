@@ -73,8 +73,8 @@ export async function GET(
     return NextResponse.json(days)
   } catch (error: any) {
     console.error('API Error:', error)
-    res
-      .status(500)
-      .json({ message: error.message || 'Error fetching contributions' })
+    return NextResponse.json({
+      message: error.message || 'Error fetching contributions'
+    })
   }
 }
