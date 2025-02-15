@@ -10,7 +10,7 @@ import { folder, useControls } from 'leva'
 import { VignetteTechnique } from 'postprocessing'
 import { LUTCubeLoader } from 'three-stdlib'
 
-import { useDeviceDetect } from '~/hooks/use-device-detect'
+import { useDeviceDetect } from '~/ts/hooks/use-device-detect'
 
 export default function Effects() {
   const { isAndroid } = useDeviceDetect()

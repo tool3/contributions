@@ -6,7 +6,7 @@ import { Leva, useControls } from 'leva'
 import { Perf } from 'r3f-perf'
 import { ReactNode, Suspense, useLayoutEffect, useRef, useState } from 'react'
 
-import { useDeviceDetect } from '~/hooks/use-device-detect'
+import { useDeviceDetect } from '~/ts/hooks/use-device-detect'
 
 import Debug from '../debug/debug'
 

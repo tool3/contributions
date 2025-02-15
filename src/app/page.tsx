@@ -1,35 +1,60 @@
-import { retrieveContributionData } from '~/components/github/github'
+'use client'
 
-type Props = {
-  userName: string
-  totalContributions: number
-  contributionDays: Externals.Github.ContributionDay[]
+import { useState } from 'react'
+
+import User from '~/components/user/user'
+
+import ContributionChart from '../components/chart/chart'
+import s from './page.module.scss'
+
+interface Contribution {
+  date: string
+  count: number
 }
 
-const Page = (props: Props) => {
-  console.log({ props })
-  return <h1>hello</h1>
-}
+export default function Page() {
+  const [contributions, setContributions] = useState<Contribution[]>([])
+  const [username, setUsername] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-Page.getInitialProps = async (context) => {
-  const userName = (context.query['user_name'] as string) || 'tool3'
-  const {
-    data: {
-      user: {
-        contributionsCollection: {
-          contributionCalendar: { totalContributions, weeks }
-        }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetch(`/api/contributions?username=${username}`)
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(
+          errorData.message || `HTTP error! status: ${response.status}`
+        )
       }
+      const data: Contribution[] = await response.json()
+      setContributions(data)
+    } catch (err: any) {
+      setError(err.message)
+      console.error('Error fetching contributions:', err)
+    } finally {
+      setLoading(false)
     }
-  } = await retrieveContributionData(userName)
-  const contributionDays = weeks.reduce((prev, cur) => {
-    return prev.concat(cur.contributionDays)
-  }, [] as Externals.Github.ContributionDay[])
-  return {
-    userName,
-    totalContributions,
-    contributionDays
   }
-}
 
-export default Page
+  const props = {
+    handleSubmit,
+    loading,
+    username,
+    setUsername
+  }
+
+  return (
+    <div>
+      <div className={s.user}>
+        <User {...props} />
+      </div>
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+      <ContributionChart username={username} contributions={contributions} />
+    </div>
+  )
+}

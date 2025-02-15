@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { useWindowSize } from '~/hooks/use-window-size'
+import { useWindowSize } from '~/ts/hooks/use-window-size'
 
 import s from './grid.module.scss'
 
