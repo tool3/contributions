@@ -3,7 +3,7 @@ import { Text3D } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
 import { Suspense, useLayoutEffect, useRef } from 'react'
-import { Color, Vector3 } from 'three'
+import { Color } from 'three'
 
 import Grid from '../grid/grid'
 import Effects from '../mincanvas/effects'
@@ -77,7 +77,6 @@ const ContributionGrid = ({
   useLayoutEffect(() => {
     if (controls && camera && contributions.length) {
       controls.autoRotate = true
-      const position = new Vector3(0, 20, 0)
       gsap.to(camera.position, {
         y: () => 20,
         duration: 2,
