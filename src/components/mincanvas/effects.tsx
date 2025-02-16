@@ -56,7 +56,7 @@ export default function Effects() {
     ),
     Vignette: folder(
       {
-        vignetteEnabled: true,
+        vignetteEnabled: false,
         vignetteStrength: {
           value: 0.7,
           min: 0,
