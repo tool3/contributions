@@ -66,9 +66,9 @@ export default function CanvasWithModel({
         }}
         gl={{
           antialias: true,
-          alpha: false,
-          premultipliedAlpha: false,
-          powerPreference: 'high-performance'
+          alpha: true,
+          premultipliedAlpha: true,
+          powerPreference: 'high-performance',
         }}
         style={{
           height: '100svh',

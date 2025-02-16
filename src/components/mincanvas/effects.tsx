@@ -21,14 +21,14 @@ export default function Effects() {
     scanlineEnabled,
     scanlineStrength
   } = useControls('Post Processing', {
-    enabled: false,
+    enabled: true,
     Bloom: folder(
       {
         bloomEnabled: true,
         luminanceThreshold: {
-          value: 1.0,
+          value: 2.0,
           min: 0,
-          max: 1
+          max: 5.0
         },
         luminanceSmoothing: {
           value: 1.0,

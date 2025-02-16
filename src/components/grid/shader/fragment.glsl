@@ -159,10 +159,9 @@ void main() {
     }
 
     color = sqrt(tanh(color * color));
-    color = sRGBencode(color);
     gl_FragColor = vec4(color, 1);
 
 
-    // #include <tonemapping_fragment>
-    // #include <colorspace_fragment>
+    #include <tonemapping_fragment>
+    #include <colorspace_fragment>
 }

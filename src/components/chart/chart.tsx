@@ -28,34 +28,6 @@ const getColor = (count: number) => {
   return GITHUB_COLORS[0]
 }
 
-// const tempBoxes = new Object3D()
-
-// function InstanceBoxes({ color, height, emissiveIntensity, i, position }: any) {
-//   const material = useMemo(
-//     () => new MeshStandardMaterial({ color, emissiveIntensity }),
-//     [color, emissiveIntensity]
-//   )
-//   const boxesGeometry = useMemo(
-//     () => new BoxGeometry(0.5, height, 0.5),
-//     [height]
-//   )
-//   const ref = useRef() as any
-
-//   useFrame(() => {
-//     let counter = 0
-//     for (let c = 0; c < 1; c++) {
-//       const id = counter++
-//       const [x, y, z] = position
-//       tempBoxes.position.set(x, y, z)
-//       tempBoxes.updateMatrix()
-//       ref.current.setMatrixAt(id, tempBoxes.matrix)
-//     }
-//     ref.current.instanceMatrix.needsUpdate = true
-//   })
-
-//   return <instancedMesh ref={ref} args={[boxesGeometry, material, 307]} />
-// }
-
 function Box({ color, height, emissiveIntensity, i, position }) {
   return (
     <mesh key={i} position={position}>
@@ -86,7 +58,7 @@ const ContributionGrid = ({
           const color = new Color(getColor(day.contributionCount))
           const height =
             day.contributionCount > 0 ? day.contributionCount * 0.2 : 0.5
-          const emissiveIntensity = Math.min(2, day.contributionCount / 10)
+          const emissiveIntensity = Math.min(3, day.contributionCount / 10)
           const position = [
             (i % cols) + offsetX,
             height / 2,
@@ -116,8 +88,8 @@ const ContributionVisualizer = ({
 }) => {
   return (
     <CanvasWithModel cameraPosition={[0, 50, 0]}>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[5, 10, 5]} intensity={1} />
+      {/* <ambientLight intensity={0.5} />
+      <directionalLight position={[5, 10, 5]} intensity={1} /> */}
       <Suspense>
         <ContributionGrid contributions={contributions} />
         <Text3D
