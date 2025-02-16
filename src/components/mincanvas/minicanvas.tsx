@@ -14,9 +14,9 @@ export default function CanvasWithModel({
   className,
   orbitEnabled = true,
   panel = false,
-  maxZoom = 300,
-  minZoom = 10,
-  initZoom = 50,
+  maxZoom = 100,
+  minZoom = 5,
+  initZoom = 20,
   cameraPosition = [0, 0, 100],
   children
 }: {
@@ -35,8 +35,9 @@ export default function CanvasWithModel({
   const { isMobile, isTablet } = useDeviceDetect()
   const zoom = isMobile && !isTablet ? 13 : initZoom
 
-  const { perf } = useControls({
-    perf: false
+  const { perf, rotate } = useControls({
+    perf: false,
+    rotate: true
   })
 
   useLayoutEffect(() => {
@@ -81,13 +82,14 @@ export default function CanvasWithModel({
         <Suspense fallback={null}>{children}</Suspense>
         <Environment files={'/textures/environments/autumn_field_1k.hdr'} />
         <OrbitControls
+          autoRotate={rotate}
           ref={target}
           makeDefault
           enabled={orbitEnabled}
           minZoom={minZoom}
           maxZoom={maxZoom}
           maxPolarAngle={Math.PI / 2}
-          maxDistance={100}
+          maxDistance={200}
           minDistance={10}
         />
       </Canvas>

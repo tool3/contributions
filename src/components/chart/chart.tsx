@@ -97,7 +97,7 @@ const ContributionVisualizer = ({
           rotation={[-Math.PI / 2, 0, 0]}
         >
           {username}
-          <meshStandardMaterial color="white" emissive={'#39d353'} />
+          <meshStandardMaterial color="#39d353" emissive={'#39d353'} />
         </Text3D>
       </Suspense>
       <Effects />
