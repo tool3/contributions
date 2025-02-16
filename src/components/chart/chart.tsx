@@ -1,7 +1,9 @@
 /* eslint-disable react/no-unknown-property */
 import { Text3D } from '@react-three/drei'
-import { Suspense } from 'react'
-import { Color } from 'three'
+import { useThree } from '@react-three/fiber'
+import gsap from 'gsap'
+import { Suspense, useLayoutEffect, useRef } from 'react'
+import { Color, Vector3 } from 'three'
 
 import Grid from '../grid/grid'
 import Effects from '../mincanvas/effects'
@@ -29,8 +31,27 @@ const getColor = (count: number) => {
 }
 
 function Box({ color, height, emissiveIntensity, i, position }) {
+  const ref = useRef() as any
+  useLayoutEffect(() => {
+    if (ref.current) {
+      gsap.to(ref.current.scale, {
+        y: 1,
+        duration: 3,
+        stagger: 0.08,
+        ease: 'expo.out'
+      })
+    }
+  }, [ref, i])
+
   return (
-    <mesh castShadow receiveShadow key={i} position={position}>
+    <mesh
+      ref={ref}
+      castShadow
+      scale={[1, 0, 1]}
+      receiveShadow
+      key={i}
+      position={position}
+    >
       <boxGeometry args={[0.8, height, 0.8]} />
       <meshStandardMaterial
         color={color}
@@ -50,6 +71,21 @@ const ContributionGrid = ({
   const rows = Math.ceil(contributions.length / cols)
   const offsetX = -(cols / 2)
   const offsetZ = rows / 2
+
+  const { controls, camera } = useThree() as any
+
+  useLayoutEffect(() => {
+    if (controls && camera && contributions.length) {
+      controls.autoRotate = true
+      const position = new Vector3(0, 20, 0)
+      gsap.to(camera.position, {
+        y: () => 20,
+        duration: 2,
+        ease: 'expo.out'
+      })
+      controls.setLookAt()
+    }
+  }, [controls, camera, contributions])
 
   return (
     <>
@@ -92,7 +128,7 @@ const ContributionVisualizer = ({
         <ContributionGrid contributions={contributions} />
         <Text3D
           scale={1}
-          position={[-3, 0, 6]}
+          position={[0, 0, 6]}
           font={'/fonts/helvetiker_regular.typeface.json'}
           rotation={[-Math.PI / 2, 0, 0]}
         >

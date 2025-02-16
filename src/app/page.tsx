@@ -44,7 +44,8 @@ export default function Page() {
     handleSubmit,
     loading,
     username,
-    setUsername
+    setUsername,
+    contributions
   }
 
   return (

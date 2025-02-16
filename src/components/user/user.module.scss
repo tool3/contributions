@@ -48,21 +48,12 @@ $circle-size: 70px;
   padding: 2.5rem;
   box-shadow: 0 10px 30px $shadow-dark;
   backdrop-filter: blur(20px);
-  transition: all 0.3s ease-in-out;
   opacity: 1;
-  transition:
-    transform 0.3s ease-in-out,
-    opacity 0.3s ease-in-out;
+  will-change: transform;
 
   @media screen and (width <= 800px) {
     left: 50%;
     transform: translateX(-50%);
-  }
-
-  &.shrunk {
-    transform: scale(0) translateX(100%);
-    opacity: 0;
-    pointer-events: none;
   }
 
   h1 {
@@ -146,10 +137,10 @@ $circle-size: 70px;
   align-items: center;
   cursor: pointer;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease-in-out;
 
   &:hover {
-    transform: rotate(180deg);
+    transform: scale(1.05);
   }
 
   svg {

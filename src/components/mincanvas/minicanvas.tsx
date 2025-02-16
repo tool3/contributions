@@ -37,7 +37,7 @@ export default function CanvasWithModel({
 
   const { perf, rotate } = useControls({
     perf: false,
-    rotate: true
+    rotate: false
   })
 
   useLayoutEffect(() => {
