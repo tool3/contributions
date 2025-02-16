@@ -76,7 +76,7 @@ export default function CanvasWithModel({
         }}
       >
         {perf ? <Perf position="bottom-left" logsPerSecond={1} /> : null}
-        <color attach={'background'} args={['#ffffff']} />
+        <color attach={'background'} args={['#000']} />
         <Suspense fallback={null}>{children}</Suspense>
         <Environment files={'/textures/environments/autumn_field_1k.hdr'} />
         <OrbitControls

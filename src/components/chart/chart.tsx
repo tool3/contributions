@@ -86,7 +86,7 @@ const ContributionGrid = ({
           const color = new Color(getColor(day.contributionCount))
           const height =
             day.contributionCount > 0 ? day.contributionCount * 0.2 : 0.5
-          const emissiveIntensity = Math.min(1, day.contributionCount / 10)
+          const emissiveIntensity = Math.min(2, day.contributionCount / 10)
           const position = [
             (i % cols) + offsetX,
             height / 2,
