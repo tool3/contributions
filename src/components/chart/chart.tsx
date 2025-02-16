@@ -88,8 +88,6 @@ const ContributionVisualizer = ({
 }) => {
   return (
     <CanvasWithModel cameraPosition={[0, 50, 0]}>
-      {/* <ambientLight intensity={0.5} />
-      <directionalLight position={[5, 10, 5]} intensity={1} /> */}
       <Suspense>
         <ContributionGrid contributions={contributions} />
         <Text3D
