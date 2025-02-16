@@ -1,8 +1,9 @@
 /* eslint-disable react/no-unknown-property */
-import { Grid, OrbitControls, Text3D } from '@react-three/drei'
-import { Bloom, EffectComposer } from '@react-three/postprocessing'
+import { Text3D } from '@react-three/drei'
+import { Suspense } from 'react'
 import { Color } from 'three'
 
+import Grid from '../grid/grid'
 import Effects from '../mincanvas/effects'
 import CanvasWithModel from '../mincanvas/minicanvas'
 
@@ -27,11 +28,35 @@ const getColor = (count: number) => {
   return GITHUB_COLORS[0]
 }
 
-function InstancedBox({ color, height, emissiveIntensity, i, position }) {
-  // const ref = useRef() as any
-  // useEffect(() => {
-  //   ref.current.setMatrixAt(0, new Matrix4())
-  // }, [])
+// const tempBoxes = new Object3D()
+
+// function InstanceBoxes({ color, height, emissiveIntensity, i, position }: any) {
+//   const material = useMemo(
+//     () => new MeshStandardMaterial({ color, emissiveIntensity }),
+//     [color, emissiveIntensity]
+//   )
+//   const boxesGeometry = useMemo(
+//     () => new BoxGeometry(0.5, height, 0.5),
+//     [height]
+//   )
+//   const ref = useRef() as any
+
+//   useFrame(() => {
+//     let counter = 0
+//     for (let c = 0; c < 1; c++) {
+//       const id = counter++
+//       const [x, y, z] = position
+//       tempBoxes.position.set(x, y, z)
+//       tempBoxes.updateMatrix()
+//       ref.current.setMatrixAt(id, tempBoxes.matrix)
+//     }
+//     ref.current.instanceMatrix.needsUpdate = true
+//   })
+
+//   return <instancedMesh ref={ref} args={[boxesGeometry, material, 307]} />
+// }
+
+function Box({ color, height, emissiveIntensity, i, position }) {
   return (
     <mesh key={i} position={position}>
       <boxGeometry args={[0.8, height, 0.8]} />
@@ -55,27 +80,30 @@ const ContributionGrid = ({
   const offsetZ = rows / 2
 
   return (
-    <group>
-      {contributions.map((day, i) => {
-        const color = new Color(getColor(day.contributionCount))
-        const height =
-          day.contributionCount > 0 ? day.contributionCount * 0.2 : 0.5
-        const emissiveIntensity = Math.min(1, day.contributionCount / 10)
-        const position = [
-          (i % cols) + offsetX,
-          height / 2,
-          -Math.floor(i / cols) + offsetZ
-        ]
-        const props = {
-          color,
-          height,
-          emissiveIntensity,
-          i,
-          position
-        }
-        return <InstancedBox key={i} {...props} />
-      })}
-    </group>
+    <>
+      <group>
+        {contributions.map((day, i) => {
+          const color = new Color(getColor(day.contributionCount))
+          const height =
+            day.contributionCount > 0 ? day.contributionCount * 0.2 : 0.5
+          const emissiveIntensity = Math.min(1, day.contributionCount / 10)
+          const position = [
+            (i % cols) + offsetX,
+            height / 2,
+            -Math.floor(i / cols) + offsetZ
+          ]
+          const props = {
+            color,
+            height,
+            emissiveIntensity,
+            i,
+            position
+          }
+          return <Box key={i} {...props} />
+        })}
+      </group>
+      {contributions.length ? <Grid /> : null}
+    </>
   )
 }
 
@@ -90,40 +118,18 @@ const ContributionVisualizer = ({
     <CanvasWithModel cameraPosition={[0, 50, 0]}>
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 10, 5]} intensity={1} />
-      <OrbitControls
-        maxPolarAngle={Math.PI / 2}
-        makeDefault
-        minZoom={1}
-        maxZoom={100}
-      />
-      <EffectComposer>
-        <Bloom
-          luminanceThreshold={0.5}
-          luminanceSmoothing={0.2}
-          intensity={1.5}
-        />
-      </EffectComposer>
-      <Grid
-        args={[100, 50]}
-        sectionThickness={1}
-        cellSize={1}
-        // infiniteGrid
-        // fadeDistance={200}
-        sectionColor={'#6f6f6f'}
-        cellColor={'#6f6f6f'}
-        followCamera={false}
-      />
-      {/* <gridHelper args={[50, 50, 0xff0000, 'teal']} /> */}
-      <ContributionGrid contributions={contributions} />
-      <Text3D
-        scale={1}
-        position={[0, 0, 6]}
-        font={'/fonts/helvetiker_regular.typeface.json'}
-        rotation={[-Math.PI / 2, 0, 0]}
-      >
-        {username}
-        <meshStandardMaterial color="white" />
-      </Text3D>
+      <Suspense>
+        <ContributionGrid contributions={contributions} />
+        <Text3D
+          scale={1}
+          position={[-3, 0, 6]}
+          font={'/fonts/helvetiker_regular.typeface.json'}
+          rotation={[-Math.PI / 2, 0, 0]}
+        >
+          {username}
+          <meshStandardMaterial color="white" emissive={'#39d353'} />
+        </Text3D>
+      </Suspense>
       <Effects />
     </CanvasWithModel>
   )

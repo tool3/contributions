@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { OrbitControls, Stats } from '@react-three/drei'
+import { Environment, OrbitControls, Stats } from '@react-three/drei'
 import { Canvas, Vector3 } from '@react-three/fiber'
 import gsap from 'gsap'
 import { Leva, useControls } from 'leva'
@@ -76,15 +76,16 @@ export default function CanvasWithModel({
         }}
       >
         {perf ? <Perf position="bottom-left" logsPerSecond={1} /> : null}
-        <color attach={'background'} args={['#000']} />
+        <color attach={'background'} args={['#ffffff']} />
         <Suspense fallback={null}>{children}</Suspense>
-
+        <Environment files={'/textures/environments/autumn_field_1k.hdr'} />
         <OrbitControls
           ref={target}
           makeDefault
           enabled={orbitEnabled}
           minZoom={minZoom}
           maxZoom={maxZoom}
+          maxPolarAngle={Math.PI / 2}
           maxDistance={100}
           minDistance={10}
         />
