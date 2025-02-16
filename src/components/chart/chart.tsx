@@ -30,7 +30,7 @@ const getColor = (count: number) => {
 
 function Box({ color, height, emissiveIntensity, i, position }) {
   return (
-    <mesh key={i} position={position}>
+    <mesh castShadow receiveShadow key={i} position={position}>
       <boxGeometry args={[0.8, height, 0.8]} />
       <meshStandardMaterial
         color={color}

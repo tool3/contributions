@@ -58,6 +58,7 @@ export default function CanvasWithModel({
         ref={canvasRef}
         dpr={[1, 2]}
         orthographic
+        shadows
         camera={{
           frustumCulled: true,
           fov: 50,
