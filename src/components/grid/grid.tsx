@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unknown-property */
 import { useFrame } from '@react-three/fiber'
-import { Suspense, useRef } from 'react'
+import { Suspense, useMemo, useRef } from 'react'
 import { DoubleSide, Vector2 } from 'three'
 
 import fragmentShader from './shader/fragment.glsl'
@@ -27,13 +27,16 @@ export default function Grid() {
     sizes.height * sizes.pixelRatio
   )
 
-  const uniforms = {
-    uTime: { value: 0 },
-    uResolution: {
-      max: resolution,
-      value: resolution
-    }
-  }
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uResolution: {
+        max: resolution,
+        value: resolution
+      }
+    }),
+    []
+  )
 
   return (
     <Suspense fallback={null}>
