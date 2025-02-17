@@ -7,7 +7,6 @@ import {
 import { folder, useControls } from 'leva'
 import { VignetteTechnique } from 'postprocessing'
 
-
 export default function Effects() {
   const {
     enabled,

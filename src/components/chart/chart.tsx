@@ -72,17 +72,23 @@ const ContributionGrid = ({
   const offsetX = -(cols / 2)
   const offsetZ = rows / 2
 
-  const { controls, camera } = useThree() as any
+  const three = useThree() as any
+  const { controls, camera } = three
 
   useLayoutEffect(() => {
-    if (controls && camera && contributions.length) {
-      controls.autoRotate = true
+    if (controls && contributions.length) {
       gsap.to(camera.position, {
-        y: () => 20,
-        duration: 2,
-        ease: 'expo.out'
+        x: 0,
+        y: 50,
+        z: 100,
+        duration: 1,
+        delay: 1,
+        // ease: 'expo.out',
+        onUpdate: () => {
+          camera.lookAt(0, 0, 0)
+          controls.autoRotate = true
+        }
       })
-      controls.setLookAt()
     }
   }, [controls, camera, contributions])
 
@@ -126,6 +132,7 @@ const ContributionVisualizer = ({
       <Suspense>
         <ContributionGrid contributions={contributions} />
         <Text3D
+          name={'username'}
           scale={1}
           position={[0, 0, 6]}
           font={'/fonts/helvetiker_regular.typeface.json'}

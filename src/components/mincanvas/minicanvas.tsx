@@ -1,10 +1,9 @@
 /* eslint-disable react/no-unknown-property */
 import { Environment, OrbitControls, Stats } from '@react-three/drei'
 import { Canvas, Vector3 } from '@react-three/fiber'
-import gsap from 'gsap'
 import { Leva, useControls } from 'leva'
 import { Perf } from 'r3f-perf'
-import { ReactNode, Suspense, useLayoutEffect, useRef, useState } from 'react'
+import { ReactNode, Suspense, useRef, useState } from 'react'
 
 import { useDeviceDetect } from '~/ts/hooks/use-device-detect'
 
@@ -17,7 +16,7 @@ export default function CanvasWithModel({
   maxZoom = 100,
   minZoom = 5,
   initZoom = 20,
-  cameraPosition = [0, 0, 100],
+  cameraPosition = [0, 0, 300],
   children
 }: {
   className?: string
@@ -40,15 +39,6 @@ export default function CanvasWithModel({
     rotate: false
   })
 
-  useLayoutEffect(() => {
-    if (target.current) {
-      gsap.to(target.current.position, {
-        z: 0,
-        delay: 1
-      })
-    }
-  }, [target])
-
   return (
     <>
       <Leva collapsed hidden={!active} />
@@ -61,8 +51,9 @@ export default function CanvasWithModel({
         orthographic
         shadows
         camera={{
-          frustumCulled: true,
           fov: 50,
+          far: 10000,
+          frustumCulled: true,
           position: cameraPosition,
           zoom
         }}
