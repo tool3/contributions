@@ -81,11 +81,13 @@ const ContributionGrid = ({
         x: 0,
         y: 50,
         z: 100,
-        duration: 1,
+        duration: 3,
         delay: 1,
-        // ease: 'expo.out',
-        onUpdate: () => {
-          camera.lookAt(0, 0, 0)
+        ease: 'expo',
+        // onUpdate: () => {
+        //   camera.lookAt(0, 0, 0)
+        // },
+        onComplete: () => {
           controls.autoRotate = true
         }
       })
@@ -99,7 +101,7 @@ const ContributionGrid = ({
           const color = new Color(getColor(day.contributionCount))
           const height =
             day.contributionCount > 0 ? day.contributionCount * 0.2 : 0.5
-          const emissiveIntensity = Math.min(3, day.contributionCount / 10)
+          const emissiveIntensity = Math.min(2, day.contributionCount / 10)
           const position = [
             (i % cols) + offsetX,
             height / 2,
@@ -139,7 +141,11 @@ const ContributionVisualizer = ({
           rotation={[-Math.PI / 2, 0, 0]}
         >
           {username}
-          <meshStandardMaterial color="#39d353" emissive={'#39d353'} />
+          <meshStandardMaterial
+            emissiveIntensity={2}
+            color="#39d353"
+            emissive={'#39d353'}
+          />
         </Text3D>
       </Suspense>
       <Effects />

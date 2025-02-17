@@ -71,7 +71,7 @@ export default function CanvasWithModel({
         {perf ? <Perf position="bottom-left" logsPerSecond={1} /> : null}
         <color attach={'background'} args={['#000']} />
         <Suspense fallback={null}>{children}</Suspense>
-        <Environment files={'/textures/environments/autumn_field_1k.hdr'} />
+        <Environment environmentIntensity={0.8} files={'/textures/environments/studio_small_03_1k.hdr'} />
         <OrbitControls
           autoRotate={rotate}
           ref={target}

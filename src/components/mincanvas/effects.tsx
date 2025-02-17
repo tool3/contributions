@@ -30,9 +30,9 @@ export default function Effects() {
           max: 5.0
         },
         luminanceSmoothing: {
-          value: 1.0,
+          value: 1.15,
           min: 0,
-          max: 1
+          max: 5.0
         },
         intensity: {
           value: 1.5,
@@ -44,9 +44,9 @@ export default function Effects() {
     ),
     Scanline: folder(
       {
-        scanlineEnabled: false,
+        scanlineEnabled: true,
         scanlineStrength: {
-          value: 0.01,
+          value: 0.03,
           min: 0,
           max: 1
         }
