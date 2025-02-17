@@ -13,7 +13,6 @@ export default function Capture({ canvasRef }: { canvasRef: any }) {
     const dataURL = canvas
       .toDataURL('image/png')
       .replace('image/png', 'image/octet-stream')
-    console.log({ dataURL })
 
     const link = document.createElement('a')
     link.href = dataURL
