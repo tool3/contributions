@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { Text3D } from '@react-three/drei'
+import { Center, Text3D } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
 import { Suspense, useLayoutEffect, useMemo, useRef } from 'react'
@@ -134,21 +134,25 @@ const ContributionVisualizer = ({
   return (
     <CanvasWithModel cameraPosition={[0, 50, 0]}>
       <Suspense>
-        {contributionGrid}
-        <Text3D
-          name={'username'}
-          scale={1}
-          position={[0, 0, 6]}
-          font={'/fonts/helvetiker_regular.typeface.json'}
-          rotation={[-Math.PI / 2, 0, 0]}
-        >
-          {username}
-          <meshStandardMaterial
-            emissiveIntensity={2}
-            color="#39d353"
-            emissive={'#39d353'}
-          />
-        </Text3D>
+        <Center bottom>
+          <group>
+            {contributionGrid}
+            <Text3D
+              name={'username'}
+              scale={1}
+              position={[-(username.length / 4), 0, 6]}
+              font={'/fonts/Geist_Mono_Regular.json'}
+              rotation={[-Math.PI / 2, 0, 0]}
+            >
+              {username}
+              <meshStandardMaterial
+                emissiveIntensity={2}
+                color="#39d353"
+                emissive={'#39d353'}
+              />
+            </Text3D>
+          </group>
+        </Center>
       </Suspense>
       <Effects />
     </CanvasWithModel>

@@ -19,9 +19,25 @@ export async function GET(
     })
   }
 
+  // const query = `{
+  //   user(login: "${username}") {
+  //     contributionsCollection {
+  //       contributionCalendar {
+  //         weeks {
+  //           contributionDays {
+  //             date
+  //             contributionCount
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }`
+  const fromDate = '2024-01-01T00:00:00Z'
+  const toDate = '2024-12-31T23:59:59Z'
   const query = `{
     user(login: "${username}") {
-      contributionsCollection {
+      contributionsCollection(from: "${fromDate}", to: "${toDate}") {
         contributionCalendar {
           weeks {
             contributionDays {
