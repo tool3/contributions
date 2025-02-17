@@ -81,12 +81,9 @@ const ContributionGrid = ({
         x: 0,
         y: 50,
         z: 100,
-        duration: 3,
-        delay: 1,
+        duration: 2,
+        delay: 2,
         ease: 'expo',
-        // onUpdate: () => {
-        //   camera.lookAt(0, 0, 0)
-        // },
         onComplete: () => {
           controls.autoRotate = true
         }
