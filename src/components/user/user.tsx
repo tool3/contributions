@@ -3,13 +3,15 @@ import gsap from 'gsap'
 import { useLayoutEffect, useState } from 'react'
 
 import s from './user.module.scss'
+import Capture from '../capture/capture'
 
 export default function User({
   handleSubmit,
   loading,
   username,
   setUsername,
-  contributions
+  contributions,
+  canvasRef
 }) {
   const [isShrunk, setIsShrunk] = useState(false)
 
@@ -70,6 +72,7 @@ export default function User({
             {loading ? 'Loading...' : 'Visualize'}
           </button>
         </form>
+        <Capture canvasRef={canvasRef} />
       </div>
     </>
   )

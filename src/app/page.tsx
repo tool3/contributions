@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import User from '~/components/user/user'
 
@@ -16,6 +16,7 @@ export default function Page() {
   const [username, setUsername] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const canvasRef = useRef() as React.MutableRefObject<HTMLCanvasElement>
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -45,14 +46,19 @@ export default function Page() {
     loading,
     username,
     setUsername,
-    contributions
+    contributions,
+    canvasRef
   }
 
   return (
     <div>
       <User {...props} />
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      <ContributionChart username={username} contributions={contributions} />
+      <ContributionChart
+        canvasRef={canvasRef}
+        username={username}
+        contributions={contributions}
+      />
     </div>
   )
 }

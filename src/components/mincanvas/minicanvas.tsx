@@ -17,6 +17,7 @@ export default function CanvasWithModel({
   minZoom = 5,
   initZoom = 20,
   cameraPosition = [0, 0, 300],
+  canvasRef = useRef() as React.MutableRefObject<HTMLCanvasElement>,
   children
 }: {
   className?: string
@@ -26,9 +27,9 @@ export default function CanvasWithModel({
   minZoom?: number
   initZoom?: number
   cameraPosition?: Vector3
+  canvasRef?: React.MutableRefObject<HTMLCanvasElement>
   children: ReactNode
 }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
   const target = useRef([0, 0, 0]) as any
   const [active, setActive] = useState(panel)
   const { isMobile, isTablet } = useDeviceDetect()
@@ -41,7 +42,7 @@ export default function CanvasWithModel({
 
   return (
     <>
-      <Leva collapsed hidden={!active} />
+      <Leva hideCopyButton collapsed hidden={!active} />
       {perf ? <Stats /> : null}
       <Debug set={setActive} />
       <Canvas
@@ -59,9 +60,7 @@ export default function CanvasWithModel({
         }}
         gl={{
           antialias: true,
-          alpha: true,
-          premultipliedAlpha: true,
-          powerPreference: 'high-performance',
+          preserveDrawingBuffer: true
         }}
         style={{
           height: '100svh',
@@ -71,7 +70,10 @@ export default function CanvasWithModel({
         {perf ? <Perf position="bottom-left" logsPerSecond={1} /> : null}
         <color attach={'background'} args={['#000']} />
         <Suspense fallback={null}>{children}</Suspense>
-        <Environment environmentIntensity={0.8} files={'/textures/environments/studio_small_03_1k.hdr'} />
+        <Environment
+          environmentIntensity={0.8}
+          files={'/textures/environments/autumn_field_1k.hdr'}
+        />
         <OrbitControls
           autoRotate={rotate}
           ref={target}

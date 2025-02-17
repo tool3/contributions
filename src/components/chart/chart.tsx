@@ -3,7 +3,7 @@ import { Center, Text3D } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
 import { Suspense, useLayoutEffect, useMemo, useRef } from 'react'
-import { Color } from 'three'
+import { Color, DoubleSide } from 'three'
 
 import Grid from '../grid/grid'
 import Effects from '../mincanvas/effects'
@@ -77,6 +77,7 @@ const ContributionGrid = ({
 
   useLayoutEffect(() => {
     if (controls && contributions.length) {
+      controls.enabled = true
       gsap.to(camera.position, {
         x: 0,
         y: 50,
@@ -121,10 +122,12 @@ const ContributionGrid = ({
 
 const ContributionVisualizer = ({
   contributions,
-  username
+  username,
+  canvasRef
 }: {
   contributions: any[]
   username: string
+  canvasRef: React.MutableRefObject<HTMLCanvasElement>
 }) => {
   const contributionGrid = useMemo(
     () => <ContributionGrid contributions={contributions} />,
@@ -132,28 +135,37 @@ const ContributionVisualizer = ({
   )
 
   return (
-    <CanvasWithModel cameraPosition={[0, 50, 0]}>
-      <Suspense>
-        <Center bottom>
-          <group>
-            {contributionGrid}
-            <Text3D
-              name={'username'}
-              scale={1}
-              position={[-(username.length / 4), 0, 6]}
-              font={'/fonts/Geist_Mono_Regular.json'}
-              rotation={[-Math.PI / 2, 0, 0]}
-            >
-              {username}
-              <meshStandardMaterial
-                emissiveIntensity={2}
-                color="#39d353"
-                emissive={'#39d353'}
-              />
-            </Text3D>
-          </group>
+    <CanvasWithModel
+      canvasRef={canvasRef}
+      orbitEnabled={false}
+      cameraPosition={[0, 50, 0]}
+    >
+      <Center>
+        <Suspense fallback={null}>{contributionGrid}</Suspense>
+        <Center>
+          <Text3D
+            isMesh
+            name={'username'}
+            curveSegments={32}
+            bevelEnabled
+            bevelSize={0.04}
+            bevelThickness={0.1}
+            height={0.5}
+            size={2}
+            font={'/fonts/Inter_Bold.json'}
+            position={[-3, 0, 6]}
+            rotation={[-Math.PI / 2, 0, 0]}
+          >
+            {username}
+            <meshStandardMaterial
+              emissiveIntensity={1}
+              color="#39d353"
+              emissive={'#39d353'}
+              side={DoubleSide}
+            />
+          </Text3D>
         </Center>
-      </Suspense>
+      </Center>
       <Effects />
     </CanvasWithModel>
   )

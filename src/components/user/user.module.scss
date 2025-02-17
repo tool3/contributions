@@ -1,28 +1,3 @@
-// .user {
-//     position: absolute;
-//     z-index: 1;
-//     display: flex;
-//     flex-direction: column;
-//     border: 1px solid #ccc;
-//     padding: 1rem;
-//     margin: 0.5rem;
-//     backdrop-filter: blur(10px);
-//     border-radius: 5px;
-
-//     input {
-//         // margin: 0 0.5rem;
-//         padding: 0.5rem;
-//         border: 1px solid #ccc;
-//         border-radius: 5px;
-//     }
-//     button {
-//         margin: 0.5rem;
-//         padding: 0.5rem;
-//         border: 1px solid #ccc;
-//         border-radius: 5px;
-//         cursor: pointer;
-//     }
-// }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
 $bg-color: #0d1117;
@@ -36,11 +11,12 @@ $circle-size: 70px;
 
 .user {
   position: fixed;
-  top: 20px;
+  top: 15px;
   right: 10px;
   transform: translateX(0);
   z-index: 1;
   width: 100%;
+  height: 30rem;
   max-width: 420px;
   background: $card-bg;
   border: 1px solid $border-color;
@@ -50,6 +26,10 @@ $circle-size: 70px;
   backdrop-filter: blur(20px);
   opacity: 1;
   will-change: transform;
+  margin-right: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   @media screen and (width <= 800px) {
     left: 50%;

@@ -25,7 +25,7 @@ export default function Effects() {
       {
         bloomEnabled: true,
         luminanceThreshold: {
-          value: 2.0,
+          value: 2.1,
           min: 0,
           max: 5.0
         },
@@ -35,7 +35,7 @@ export default function Effects() {
           max: 5.0
         },
         intensity: {
-          value: 1.5,
+          value: 0.5,
           min: 0,
           max: 10
         }
