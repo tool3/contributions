@@ -2,7 +2,7 @@
 import { Text3D } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
-import { Suspense, useLayoutEffect, useRef } from 'react'
+import { Suspense, useLayoutEffect, useMemo, useRef } from 'react'
 import { Color } from 'three'
 
 import Grid from '../grid/grid'
@@ -129,10 +129,15 @@ const ContributionVisualizer = ({
   contributions: any[]
   username: string
 }) => {
+  const contributionGrid = useMemo(
+    () => <ContributionGrid contributions={contributions} />,
+    [contributions]
+  )
+
   return (
     <CanvasWithModel cameraPosition={[0, 50, 0]}>
       <Suspense>
-        <ContributionGrid contributions={contributions} />
+        {contributionGrid}
         <Text3D
           name={'username'}
           scale={1}

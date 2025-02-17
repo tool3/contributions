@@ -60,9 +60,9 @@ export default function User({
           <input
             type="text"
             value={username}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setUsername(e.target.value)
-            }
+            }}
             placeholder="Enter GitHub username"
             required
           />
