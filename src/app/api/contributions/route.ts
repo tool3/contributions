@@ -12,6 +12,7 @@ export async function GET(
 ) {
   const searchParams = new URL(req.url).searchParams
   const username = searchParams.get('username')
+  const year = searchParams.get('year')
 
   if (!username || typeof username !== 'string') {
     return NextResponse.json({
@@ -19,25 +20,13 @@ export async function GET(
     })
   }
 
-  // const query = `{
-  //   user(login: "${username}") {
-  //     contributionsCollection {
-  //       contributionCalendar {
-  //         weeks {
-  //           contributionDays {
-  //             date
-  //             contributionCount
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }`
-  const fromDate = '2024-01-01T00:00:00Z'
-  const toDate = '2024-12-31T23:59:59Z'
+  const yearQuery = year
+    ? `(from: "${year}-01-01T00:00:00Z", to: "${year}-12-31T23:59:59Z")`
+    : ''
+
   const query = `{
     user(login: "${username}") {
-      contributionsCollection(from: "${fromDate}", to: "${toDate}") {
+      contributionsCollection${yearQuery} {
         contributionCalendar {
           weeks {
             contributionDays {

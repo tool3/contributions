@@ -35,9 +35,11 @@ function Box({ color, height, emissiveIntensity, i, position }) {
   useLayoutEffect(() => {
     if (ref.current) {
       gsap.to(ref.current.scale, {
+        x: 1,
         y: 1,
+        z: 1,
+        delay: 3,
         duration: 3,
-        stagger: 0.08,
         ease: 'expo.out'
       })
     }
@@ -47,7 +49,7 @@ function Box({ color, height, emissiveIntensity, i, position }) {
     <mesh
       ref={ref}
       castShadow
-      scale={[1, 0, 1]}
+      scale={[1, 1, 1]}
       receiveShadow
       key={i}
       position={position}
@@ -67,11 +69,6 @@ const ContributionGrid = ({
 }: {
   contributions: Contribution[]
 }) => {
-  const cols = 53
-  const rows = Math.ceil(contributions.length / cols)
-  const offsetX = -(cols / 2)
-  const offsetZ = rows / 2
-
   const three = useThree() as any
   const { controls, camera } = three
 
@@ -80,13 +77,14 @@ const ContributionGrid = ({
       controls.enabled = true
       gsap.to(camera.position, {
         x: 0,
-        y: 50,
+        y: 130,
         z: 100,
         duration: 2,
-        delay: 2,
+        delay: 0.5,
         ease: 'expo',
         onComplete: () => {
           controls.autoRotate = true
+          camera.lookAt([0, 0, 0])
         }
       })
     }
@@ -94,17 +92,17 @@ const ContributionGrid = ({
 
   return (
     <>
-      <group>
+      <group position={[0, 0, -6]}>
         {contributions.map((day, i) => {
+          if (!day) return null
           const color = new Color(getColor(day.contributionCount))
           const height =
             day.contributionCount > 0 ? day.contributionCount * 0.2 : 0.5
           const emissiveIntensity = Math.min(2, day.contributionCount / 10)
-          const position = [
-            (i % cols) + offsetX,
-            height / 2,
-            -Math.floor(i / cols) + offsetZ
-          ]
+          const week = Math.floor(i / 7)
+          const weekday = i % 7
+          const position = [week - 26, height / 2, weekday + 3]
+
           const props = {
             color,
             height,
@@ -123,16 +121,20 @@ const ContributionGrid = ({
 const ContributionVisualizer = ({
   contributions,
   username,
+  year,
   canvasRef
 }: {
   contributions: any[]
   username: string
+  year: string
   canvasRef: React.MutableRefObject<HTMLCanvasElement>
 }) => {
   const contributionGrid = useMemo(
     () => <ContributionGrid contributions={contributions} />,
     [contributions]
   )
+
+  const yearDisplay = year === 'default' ? new Date().getFullYear() : year;
 
   return (
     <CanvasWithModel
@@ -142,30 +144,48 @@ const ContributionVisualizer = ({
     >
       <Center>
         <Suspense fallback={null}>{contributionGrid}</Suspense>
-        <Center>
-          <Text3D
-            isMesh
-            name={'username'}
-            curveSegments={32}
-            bevelEnabled
-            bevelSize={0.04}
-            bevelThickness={0.1}
-            height={0.5}
-            size={2}
-            font={'/fonts/Inter_Bold.json'}
-            position={[-3, 0, 6]}
-            rotation={[-Math.PI / 2, 0, 0]}
-          >
-            {username}
-            <meshStandardMaterial
-              emissiveIntensity={1}
-              color="#39d353"
-              emissive={'#39d353'}
-              side={DoubleSide}
-            />
-          </Text3D>
-        </Center>
+        <Text3D
+          name={'username'}
+          curveSegments={32}
+          bevelEnabled
+          bevelSize={0.04}
+          bevelThickness={0.1}
+          height={0.5}
+          size={2}
+          font={'/fonts/Inter_Bold.json'}
+          position={[-Math.floor(username.length / 2), 0, 6]}
+          rotation={[-Math.PI / 2, 0, 0]}
+        >
+          {username}
+          <meshStandardMaterial
+            emissiveIntensity={0.5}
+            color="#39d353"
+            emissive={'#39d353'}
+            side={DoubleSide}
+          />
+        </Text3D>
       </Center>
+      <Text3D
+        name={'year'}
+        curveSegments={32}
+        bevelEnabled
+        bevelSize={0.04}
+        bevelThickness={0.1}
+        height={0.3}
+        size={1}
+        font={'/fonts/Inter_Bold.json'}
+        position={[22, 0, 5]}
+        rotation={[-Math.PI / 2, 0, 0]}
+      >
+        {yearDisplay}
+        <meshStandardMaterial
+          emissiveIntensity={0.5}
+          color="#39d353"
+          emissive={'#39d353'}
+          side={DoubleSide}
+        />
+      </Text3D>
+
       <Effects />
     </CanvasWithModel>
   )

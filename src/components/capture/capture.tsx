@@ -8,8 +8,6 @@ export default function Capture({ canvasRef }: { canvasRef: any }) {
       preserveDrawingBuffer: true
     })
     const canvas = gl.canvas
-
-    // Convert canvas to an image
     const dataURL = canvas
       .toDataURL('image/png')
       .replace('image/png', 'image/octet-stream')

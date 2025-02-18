@@ -2,14 +2,17 @@
 import gsap from 'gsap'
 import { useLayoutEffect, useState } from 'react'
 
-import s from './user.module.scss'
 import Capture from '../capture/capture'
+import YearSelector from '../year-select/year-select'
+import s from './user.module.scss'
 
 export default function User({
   handleSubmit,
   loading,
   username,
   setUsername,
+  year,
+  setYear,
   contributions,
   canvasRef
 }) {
@@ -58,21 +61,24 @@ export default function User({
       </button>
       <div className={s.user}>
         <h1>Github Contribution Visualization</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={username}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setUsername(e.target.value)
-            }}
-            placeholder="Enter GitHub username"
-            required
-          />
-          <button type="submit" disabled={loading}>
-            {loading ? 'Loading...' : 'Visualize'}
-          </button>
-        </form>
-        <Capture canvasRef={canvasRef} />
+        <div className={s.content}>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              value={username}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setUsername(e.target.value)
+              }}
+              placeholder="Enter GitHub username"
+              required
+            />
+            <button type="submit" disabled={loading}>
+              {loading ? 'Loading...' : 'Visualize'}
+            </button>
+          </form>
+          <Capture canvasRef={canvasRef} />
+          <YearSelector year={year} setYear={setYear} />
+        </div>
       </div>
     </>
   )

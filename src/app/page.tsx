@@ -15,6 +15,7 @@ export default function Page() {
   const [contributions, setContributions] = useState<Contribution[]>([])
   const [username, setUsername] = useState('')
   const [loading, setLoading] = useState(false)
+  const [year, setYear] = useState('default')
   const [error, setError] = useState<string | null>(null)
   const canvasRef = useRef() as React.MutableRefObject<HTMLCanvasElement>
 
@@ -24,7 +25,11 @@ export default function Page() {
     setError(null)
 
     try {
-      const response = await fetch(`/api/contributions?username=${username}`)
+      const isYear = year !== 'default';
+      const yearQuery = isYear ? `&year=${year}` : ''
+      const response = await fetch(
+        `/api/contributions?username=${username}${yearQuery}`
+      )
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(
@@ -45,6 +50,8 @@ export default function Page() {
     handleSubmit,
     loading,
     username,
+    year,
+    setYear,
     setUsername,
     contributions,
     canvasRef
@@ -56,6 +63,7 @@ export default function Page() {
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
       <ContributionChart
         canvasRef={canvasRef}
+        year={year}
         username={username}
         contributions={contributions}
       />

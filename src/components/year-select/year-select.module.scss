@@ -1,0 +1,30 @@
+$bg-color: #0d1117;
+$card-bg: rgba(255, 255, 255, 0.07);
+$border-color: rgba(255, 255, 255, 0.15);
+$accent: #39d353;
+$hover-accent: #006d32;
+$white: #ffffff;
+$shadow-dark: rgba(0, 0, 0, 0.4);
+$circle-size: 70px;
+
+.yearSelect {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+//   background: $accent;
+  color: $white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background: $hover-accent;
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    background: rgba(255, 255, 255, 0.2);
+    cursor: not-allowed;
+  }
+}
