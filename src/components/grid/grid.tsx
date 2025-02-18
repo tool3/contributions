@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unknown-property */
 import { useFrame } from '@react-three/fiber'
+import { useControls } from 'leva'
 import { Suspense, useMemo, useRef } from 'react'
-import { DoubleSide, Vector2 } from 'three'
+import { Color, DoubleSide, Vector2 } from 'three'
 
 import fragmentShader from './shader/fragment.glsl'
 import vertexShader from './shader/vertex.glsl'
 
-export default function Grid() {
+export default function Grid({ active = true }: { active?: boolean }) {
   const shader = useRef() as any
   const planeRef = useRef() as any
 
@@ -27,9 +28,19 @@ export default function Grid() {
     sizes.height * sizes.pixelRatio
   )
 
+  const { color } = useControls('pulse', {
+    color: {
+      value: '#00ff00',
+      onEditEnd: (val) => {
+        shader.current.uniforms.uColor.value = new Color(val)
+      }
+    }
+  })
+
   const uniforms = useMemo(
     () => ({
       uTime: { value: 0 },
+      uColor: { value: new Color(color) },
       uResolution: {
         max: resolution,
         value: resolution
@@ -38,7 +49,7 @@ export default function Grid() {
     []
   )
 
-  return (
+  return active ? (
     <Suspense fallback={null}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]}>
         <planeGeometry ref={planeRef} args={[70, 70, 1, 1]} />
@@ -52,5 +63,5 @@ export default function Grid() {
         />
       </mesh>
     </Suspense>
-  )
+  ) : null
 }

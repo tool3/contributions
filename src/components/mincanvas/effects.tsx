@@ -25,7 +25,7 @@ export default function Effects() {
       {
         bloomEnabled: true,
         luminanceThreshold: {
-          value: 2.1,
+          value: 0.8,
           min: 0,
           max: 5.0
         },
@@ -72,7 +72,7 @@ export default function Effects() {
   })
 
   return enabled ? (
-    <EffectComposer multisampling={2} stencilBuffer autoClear>
+    <EffectComposer stencilBuffer autoClear>
       {bloomEnabled ? (
         <Bloom
           mipmapBlur

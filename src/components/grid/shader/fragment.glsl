@@ -1,4 +1,5 @@
 uniform vec2 uResolution;
+uniform vec3 uColor;
 uniform float uTime;
 
 varying vec3 vColor;
@@ -86,7 +87,7 @@ vec3 drops(vec2 uv) {
         // vec3 V = cross(L, U);
         // float hue = 2. * PI * hash(vec3(drop_instance, anim_instance, hash_cnt++));
         // vec3 pulse_color = clamp(.5 * L + U * cos(hue) + V * sin(hue), 0., 1.);
-        vec3 pulse_color = vec3(0.0, 1.0, 0.0);
+        vec3 pulse_color = uColor;
 
         // PULSE
         // vec2 pos = vec2(-.5 + hash(vec3(drop_instance, 1., hash_cnt++)), -.5 + hash(vec3(drop_instance, 1., hash_cnt++)));

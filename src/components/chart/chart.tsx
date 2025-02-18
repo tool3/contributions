@@ -2,8 +2,11 @@
 import { Center, Text3D } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
+import { useControls } from 'leva'
 import { Suspense, useLayoutEffect, useMemo, useRef } from 'react'
-import { Color, DoubleSide } from 'three'
+import { Color, DoubleSide, MeshStandardMaterial } from 'three'
+
+import useMatcaps from '~/ts/hooks/use-matcaps'
 
 import Grid from '../grid/grid'
 import Effects from '../mincanvas/effects'
@@ -12,22 +15,6 @@ import CanvasWithModel from '../mincanvas/minicanvas'
 interface Contribution {
   date: string
   contributionCount: number
-}
-
-const GITHUB_COLORS = [
-  '#161b22', // No contributions
-  '#0e4429', // 1-9 contributions
-  '#006d32', // 10-19 contributions
-  '#26a641', // 20-29 contributions
-  '#39d353' // 30+ contributions
-]
-
-const getColor = (count: number) => {
-  if (count >= 30) return GITHUB_COLORS[4]
-  if (count >= 20) return GITHUB_COLORS[3]
-  if (count >= 10) return GITHUB_COLORS[2]
-  if (count >= 1) return GITHUB_COLORS[1]
-  return GITHUB_COLORS[0]
 }
 
 function Box({ color, height, emissiveIntensity, i, position }) {
@@ -72,6 +59,30 @@ const ContributionGrid = ({
   const three = useThree() as any
   const { controls, camera } = three
 
+  const colors = useControls('bars', {
+    none: '#161b22',
+    ten: '#0e4429',
+    twenty: '#006d32',
+    thirty: '#26a641',
+    plus: '#39d353'
+  })
+
+  const GITHUB_COLORS = [
+    colors.none,
+    colors.ten,
+    colors.twenty,
+    colors.thirty,
+    colors.plus
+  ]
+
+  const getColor = (count: number) => {
+    if (count >= 30) return GITHUB_COLORS[4]
+    if (count >= 20) return GITHUB_COLORS[3]
+    if (count >= 10) return GITHUB_COLORS[2]
+    if (count >= 1) return GITHUB_COLORS[1]
+    return GITHUB_COLORS[0]
+  }
+
   useLayoutEffect(() => {
     if (controls && contributions.length) {
       controls.enabled = true
@@ -113,7 +124,7 @@ const ContributionGrid = ({
           return <Box key={i} {...props} />
         })}
       </group>
-      {contributions.length ? <Grid /> : null}
+      <Grid active={contributions.length > 0} />
     </>
   )
 }
@@ -134,7 +145,45 @@ const ContributionVisualizer = ({
     [contributions]
   )
 
-  const yearDisplay = year === 'default' ? new Date().getFullYear() : year;
+  const yearDisplay = year === 'default' ? new Date().getFullYear() : year
+  const { material: textMaterialOptions, color: textMaterialColor } =
+    useControls('text', {
+      material: {
+        value: 'standard',
+        options: {
+          standard: 'standard',
+          matcap: 'matcap'
+        }
+      },
+      color: '#39d353'
+    })
+  const { material: yearMaterialOptions } = useControls('year', {
+    material: {
+      value: 'standard',
+      options: {
+        standard: 'standard',
+        matcap: 'matcap'
+      }
+    }
+  })
+
+  const textMaterial = useMemo(
+    () =>
+      new MeshStandardMaterial({
+        emissiveIntensity: 0.5,
+        color: textMaterialColor,
+        emissive: textMaterialColor,
+        side: DoubleSide
+      }),
+    [textMaterialColor]
+  )
+  const textMatcapMaterial = useMatcaps({ name: 'text' })
+  const yearMatcapMaterial = useMatcaps({ name: 'year' })
+
+  const usernameTextMaterial =
+    textMaterialOptions === 'standard' ? textMaterial : textMatcapMaterial
+  const yearTextMaterial =
+    yearMaterialOptions === 'standard' ? textMaterial : yearMatcapMaterial
 
   return (
     <CanvasWithModel
@@ -155,14 +204,9 @@ const ContributionVisualizer = ({
           font={'/fonts/Inter_Bold.json'}
           position={[-Math.floor(username.length / 2), 0, 6]}
           rotation={[-Math.PI / 2, 0, 0]}
+          material={usernameTextMaterial}
         >
           {username}
-          <meshStandardMaterial
-            emissiveIntensity={0.5}
-            color="#39d353"
-            emissive={'#39d353'}
-            side={DoubleSide}
-          />
         </Text3D>
       </Center>
       <Text3D
@@ -176,16 +220,10 @@ const ContributionVisualizer = ({
         font={'/fonts/Inter_Bold.json'}
         position={[22, 0, 5]}
         rotation={[-Math.PI / 2, 0, 0]}
+        material={yearTextMaterial}
       >
         {yearDisplay}
-        <meshStandardMaterial
-          emissiveIntensity={0.5}
-          color="#39d353"
-          emissive={'#39d353'}
-          side={DoubleSide}
-        />
       </Text3D>
-
       <Effects />
     </CanvasWithModel>
   )
