@@ -6,7 +6,7 @@ import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
 import { useControls } from 'leva'
 import { Suspense, useLayoutEffect, useMemo, useRef } from 'react'
-import { Color, DoubleSide, MeshStandardMaterial, Vector3 } from 'three'
+import { Color, DoubleSide, MeshStandardMaterial } from 'three'
 
 import useMatcaps from '../../ts/hooks/use-matcaps'
 import Grid from '../grid/grid'
@@ -195,11 +195,14 @@ const ContributionVisualizer = ({
     bevelEnable: true,
     bevelSize: 0.04,
     bevelThickness: 0.1,
-    height: 0.3,
-    size: 1,
-    font: '/fonts/json/Grotesque_Regular.json',
+    height: 0.5,
+    size: 2,
+    font: '/fonts/json/Geist_Mono_Regular.json',
     rotation: [-Math.PI / 2, 0, 0] as any
   }
+
+  const offsetText = username.length % 2 === 0 ? username.length / 4 : 2
+
   return (
     <CanvasWithModel
       canvasRef={canvasRef}
@@ -211,8 +214,7 @@ const ContributionVisualizer = ({
         <Text3D
           name={'username'}
           {...textProps}
-          size={2}
-          position={[-Math.floor(username.length / 2), 0, 6]}
+          position={[-Math.floor(username.length / 2 + offsetText), 0, 6]}
           material={usernameTextMaterial}
         >
           {username}
@@ -221,6 +223,8 @@ const ContributionVisualizer = ({
       <Text3D
         name={'year'}
         {...textProps}
+        height={0.3}
+        size={1}
         position={[21.5, 0, 5]}
         material={yearTextMaterial}
       >
