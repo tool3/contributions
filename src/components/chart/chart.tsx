@@ -6,7 +6,7 @@ import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
 import { useControls } from 'leva'
 import { Suspense, useLayoutEffect, useMemo, useRef } from 'react'
-import { Color, DoubleSide, MeshStandardMaterial } from 'three'
+import { Color, DoubleSide, MeshStandardMaterial, Vector3 } from 'three'
 
 import useMatcaps from '../../ts/hooks/use-matcaps'
 import Grid from '../grid/grid'
@@ -112,7 +112,7 @@ const ContributionGrid = ({
           const color = new Color(getColor(day.contributionCount))
           const height =
             day.contributionCount > 0 ? day.contributionCount * 0.3 : 0.2
-          const emissiveIntensity = Math.min(2, day.contributionCount / 10)
+          const emissiveIntensity = Math.min(1, day.contributionCount / 10)
           const week = Math.floor(i / 7)
           const weekday = i % 7
           const position = [week - 26, height / 2, weekday + 3]
@@ -190,6 +190,16 @@ const ContributionVisualizer = ({
   const yearTextMaterial =
     yearMaterialOptions === 'standard' ? textMaterial : yearMatcapMaterial
 
+  const textProps = {
+    curveSegments: 32,
+    bevelEnable: true,
+    bevelSize: 0.04,
+    bevelThickness: 0.1,
+    height: 0.3,
+    size: 1,
+    font: '/fonts/json/Grotesque_Regular.json',
+    rotation: [-Math.PI / 2, 0, 0] as any
+  }
   return (
     <CanvasWithModel
       canvasRef={canvasRef}
@@ -200,15 +210,9 @@ const ContributionVisualizer = ({
         <Suspense fallback={null}>{contributionGrid}</Suspense>
         <Text3D
           name={'username'}
-          curveSegments={32}
-          bevelEnabled
-          bevelSize={0.04}
-          bevelThickness={0.1}
-          height={0.5}
+          {...textProps}
           size={2}
-          font={'/fonts/Inter_Bold.json'}
           position={[-Math.floor(username.length / 2), 0, 6]}
-          rotation={[-Math.PI / 2, 0, 0]}
           material={usernameTextMaterial}
         >
           {username}
@@ -216,15 +220,8 @@ const ContributionVisualizer = ({
       </Center>
       <Text3D
         name={'year'}
-        curveSegments={32}
-        bevelEnabled
-        bevelSize={0.04}
-        bevelThickness={0.1}
-        height={0.3}
-        size={1}
-        font={'/fonts/Inter_Bold.json'}
-        position={[22, 0, 5]}
-        rotation={[-Math.PI / 2, 0, 0]}
+        {...textProps}
+        position={[21.5, 0, 5]}
         material={yearTextMaterial}
       >
         {yearDisplay}

@@ -11,6 +11,12 @@
 }
 
 @font-face {
+  font-family: GeistMono;
+  src: url('../../public/fonts/geist/GeistMono-Regular.woff2')
+    format('woff2');
+}
+
+@font-face {
   font-family: DSEGMINI7;
   src: url('../../public/fonts/dseg/DSEG7-Classic-MINI/DSEG7ClassicMini-Regular.woff2') 
     format('woff2');
@@ -34,7 +40,7 @@
 
 @font-face {
   font-family: SevenSeg;
-  src: url('../../public//fonts/Seven\ Segment.ttf') format('truetype');
+  src: url('../../public/fonts/dseg/Seven\ Segment.ttf') format('truetype');
 }
 
 :root {
@@ -53,6 +59,7 @@
   --color-gray: #0f0f0f;
   --color-gray-lighter: #262626;
   --color-shout-yellow: #ddfc23;
+  --font-body: GeistMono;
 
   /* Duration */
   --duration-slow: #{$duration * 1.5}s;

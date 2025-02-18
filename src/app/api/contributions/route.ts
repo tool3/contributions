@@ -67,7 +67,7 @@ export async function GET(
       !data.data.user.contributionsCollection ||
       !data.data.user.contributionsCollection.contributionCalendar
     ) {
-      throw new Error('Invalid data structure received from GitHub API.')
+      return NextResponse.json([])
     }
 
     const days =

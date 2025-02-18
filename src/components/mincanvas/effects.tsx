@@ -27,12 +27,12 @@ export default function Effects() {
         {
           bloomEnabled: true,
           luminanceThreshold: {
-            value: 0.8,
+            value: 1.3,
             min: 0,
             max: 5.0
           },
           luminanceSmoothing: {
-            value: 1.15,
+            value: 2.0,
             min: 0,
             max: 5.0
           },
