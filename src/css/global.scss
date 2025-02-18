@@ -12,18 +12,39 @@
 
 @font-face {
   font-family: GeistMono;
-  src: url('../../public/fonts/geist/GeistMono-Regular.woff2')
-    format('woff2');
+  src: url('../../public/fonts/geist/GeistMono-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: AllianceExtraBold;
+  src: url('../../public/fonts/alliance/alliance-no-1-extrabold.woff')
+    format('woff');
+}
+
+@font-face {
+  font-family: AllianceBold;
+  src: url('../../public/fonts/alliance/alliance-no-1-bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: Alliance;
+  src: url('../../public/fonts/alliance/alliance-no-1-regular.woff')
+    format('woff');
+}
+
+@font-face {
+  font-family: Monaspace;
+  src: url('../../public/fonts/monaspace/MonaspaceArgon-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-family: DSEGMINI7;
-  src: url('../../public/fonts/dseg/DSEG7-Classic-MINI/DSEG7ClassicMini-Regular.woff2') 
+  src: url('../../public/fonts/dseg/DSEG7-Classic-MINI/DSEG7ClassicMini-Regular.woff2')
     format('woff2');
 }
 @font-face {
   font-family: DSEGMINI14;
-  src: url('../../public/fonts/dseg/DSEG14-Classic-MINI/DSEG14ClassicMini-Regular.woff2') 
+  src: url('../../public/fonts/dseg/DSEG14-Classic-MINI/DSEG14ClassicMini-Regular.woff2')
     format('woff2');
 }
 
@@ -45,11 +66,12 @@
 
 :root {
   // Typography
-  --font-system: -apple-system, blinkmacsystemfont, segoe ui, roboto, oxygen,
-    ubuntu, cantarell, fira sans, droid sans, helvetica neue, sans-serif;
+  --font-system:
+    -apple-system, blinkmacsystemfont, segoe ui, roboto, oxygen, ubuntu,
+    cantarell, fira sans, droid sans, helvetica neue, sans-serif;
 
   // Colors
-  --theme-color: #ff9c6e;
+  --theme-color: #39d353;
   --theme-color-on: #ff5f15;
   --theme-color-off: #51210c;
   --inspect-color: #f00;
@@ -89,7 +111,7 @@ html {
   background-color: var(--color-black);
 
   ::selection {
-    background: var(--color-shout-yellow);
+    background: var(--theme-color);
     color: black;
   }
 }
@@ -131,4 +153,8 @@ html.no-scroll {
 .leva-c-kWgxhW {
   position: absolute;
   left: 5px;
+
+  * {
+    font-family: GeistMono;
+  }
 }

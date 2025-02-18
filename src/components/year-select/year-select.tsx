@@ -2,7 +2,7 @@ import s from './year-select.module.scss'
 
 const CURRENT_YEAR = new Date().getFullYear()
 const YEARS = [
-  'default',
+  'Default',
   ...Array.from({ length: 5 }, (_, i) => CURRENT_YEAR - i)
 ]
 

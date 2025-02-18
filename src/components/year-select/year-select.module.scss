@@ -13,13 +13,16 @@ $circle-size: 70px;
   font-size: 1rem;
   font-weight: 600;
   color: $white;
+  background-color: $accent;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition:
   background 0.3s ease,
   transform 0.2s ease;
-  
+  text-align: center;
+  font-family: Alliance;
+
   &:hover {
     background: $hover-accent;
     transform: scale(1.05);

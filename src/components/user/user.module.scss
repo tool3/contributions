@@ -10,7 +10,6 @@ $shadow-dark: rgba(0, 0, 0, 0.4);
 $circle-size: 70px;
 
 .user {
-  font-family: Grotesque;
   position: fixed;
   top: 15px;
   right: 10px;
@@ -47,6 +46,7 @@ $circle-size: 70px;
     line-height: 1.2;
     letter-spacing: -0.5px;
     color: $white;
+    font-family: AllianceExtraBold;
   }
 
   form {
@@ -67,6 +67,7 @@ $circle-size: 70px;
     color: $white;
     outline: none;
     transition: all 0.3s ease-in-out;
+    font-family: Monaspace;
 
     &::placeholder {
       color: rgba(255, 255, 255, 0.5);
@@ -88,6 +89,7 @@ $circle-size: 70px;
     color: $white;
     border: none;
     border-radius: 8px;
+    font-family: Alliance;
     cursor: pointer;
     transition:
       background 0.3s ease,

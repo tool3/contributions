@@ -65,7 +65,7 @@ const ContributionGrid = ({
     ten: '#0e4429',
     twenty: '#006d32',
     thirty: '#26a641',
-    plus: '#39d353'
+    forty: '#39d353'
   })
 
   const GITHUB_COLORS = [
@@ -73,7 +73,7 @@ const ContributionGrid = ({
     colors.ten,
     colors.twenty,
     colors.thirty,
-    colors.plus
+    colors.forty
   ]
 
   const getColor = (count: number) => {
@@ -93,7 +93,7 @@ const ContributionGrid = ({
         y: 130,
         z: 100,
         duration: 2,
-        delay: 0.5,
+        delay: 1,
         ease: 'expo',
         onComplete: () => {
           controls.autoRotate = true

@@ -72,13 +72,15 @@ vec3 drops(vec2 uv) {
     for(int i = 0; i < 1; i++) {
         int anim_instance = i;
         // ANIMATION
-        float time_offset = hash(vec3(anim_instance, 1., hash_cnt++));
-        float speed_offset = hash(vec3(anim_instance, 1., hash_cnt++));
+        // float time_offset = hash(vec3(anim_instance, 1., hash_cnt++));
+        // float speed_offset = hash(vec3(anim_instance, 1., hash_cnt++));
+        float time_offset = 0.1 + float(i) * 0.1;
+        float speed_offset = 0.1;
 
-        float speed = sin(0.1 * mix(0.2, 2.0, speed_offset));
+        // float speed = sin(0.1 * mix(0.2, 2.0, speed_offset));
 
-        float t = speed * uTime + time_offset;
-        float drop_cycle = fract(t );
+        float t = uTime * time_offset;
+        float drop_cycle = fract(t);
         float drop_instance = floor(t);
 
         // COLOR
@@ -98,7 +100,7 @@ vec3 drops(vec2 uv) {
         // vec2 p = vec2(max(abs(uv.x - pos.x), abs(uv.y - pos.y)));
         vec2 p = vec2(max(abs(uv.x - pos.x), abs(uv.y - pos.y)));
 
-        float pulse_tail_len = 1.0;
+        float pulse_tail_len = 2.0;
         float f = (p.x + p.y) - (pulse_tail_len + 2. * sqrt(1.)) * drop_cycle;
         float pulse = max(1. - abs(f) / pulse_tail_len, 0.) * exp(-abs(f)) / (0.001 + 100. * abs(f));
 
@@ -161,7 +163,6 @@ void main() {
 
     color = sqrt(tanh(color * color));
     gl_FragColor = vec4(color, 1);
-
 
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
