@@ -74,7 +74,7 @@ export default function CanvasWithModel({
           width: '100vw'
         }}
       >
-        {perf ? <Perf position="bottom-left" logsPerSecond={1} /> : null}
+        {perf ? <Perf position={'bottom-right'} logsPerSecond={1} /> : null}
         <color attach={'background'} args={['#000']} />
         <Suspense fallback={null}>{children}</Suspense>
         <Environment
