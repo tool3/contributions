@@ -86,6 +86,7 @@ const ContributionGrid = ({
 
   useLayoutEffect(() => {
     if (controls && contributions.length) {
+      controls.autoRotate = false
       controls.enabled = true
       gsap.to(camera.position, {
         x: 0,

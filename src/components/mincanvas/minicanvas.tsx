@@ -35,10 +35,14 @@ export default function CanvasWithModel({
   const { isMobile, isTablet } = useDeviceDetect()
   const zoom = isMobile && !isTablet ? 13 : initZoom
 
-  const { perf, rotate } = useControls({
-    perf: false,
-    rotate: false
-  })
+  const { perf, rotate } = useControls(
+    'general',
+    {
+      perf: false,
+      rotate: true
+    },
+    { order: -1 }
+  )
 
   return (
     <>

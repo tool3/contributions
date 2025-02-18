@@ -19,57 +19,61 @@ export default function Effects() {
     vignetteOffset,
     scanlineEnabled,
     scanlineStrength
-  } = useControls('Post Processing', {
-    enabled: true,
-    Bloom: folder(
-      {
-        bloomEnabled: true,
-        luminanceThreshold: {
-          value: 0.8,
-          min: 0,
-          max: 5.0
+  } = useControls(
+    'Post Processing',
+    {
+      enabled: true,
+      Bloom: folder(
+        {
+          bloomEnabled: true,
+          luminanceThreshold: {
+            value: 0.8,
+            min: 0,
+            max: 5.0
+          },
+          luminanceSmoothing: {
+            value: 1.15,
+            min: 0,
+            max: 5.0
+          },
+          intensity: {
+            value: 0.5,
+            min: 0,
+            max: 10
+          }
         },
-        luminanceSmoothing: {
-          value: 1.15,
-          min: 0,
-          max: 5.0
+        { collapsed: true }
+      ),
+      Scanline: folder(
+        {
+          scanlineEnabled: true,
+          scanlineStrength: {
+            value: 0.03,
+            min: 0,
+            max: 1
+          }
         },
-        intensity: {
-          value: 0.5,
-          min: 0,
-          max: 10
-        }
-      },
-      { collapsed: true }
-    ),
-    Scanline: folder(
-      {
-        scanlineEnabled: true,
-        scanlineStrength: {
-          value: 0.03,
-          min: 0,
-          max: 1
-        }
-      },
-      { collapsed: true }
-    ),
-    Vignette: folder(
-      {
-        vignetteEnabled: false,
-        vignetteStrength: {
-          value: 0.7,
-          min: 0,
-          max: 1
+        { collapsed: true }
+      ),
+      Vignette: folder(
+        {
+          vignetteEnabled: false,
+          vignetteStrength: {
+            value: 0.7,
+            min: 0,
+            max: 1
+          },
+          vignetteOffset: {
+            value: 0,
+            min: 0,
+            max: 1
+          }
         },
-        vignetteOffset: {
-          value: 0,
-          min: 0,
-          max: 1
-        }
-      },
-      { collapsed: true }
-    )
-  })
+        { collapsed: true }
+      )
+    },
+    { collapsed: true }
+  )
 
   return enabled ? (
     <EffectComposer stencilBuffer autoClear>
