@@ -12,7 +12,7 @@ const options = Array.from(
 
 export default function useMatcaps({
   name,
-  defaultMatcap = 'matcap_61.png'
+  defaultMatcap = 'matcap_18.png'
 }: {
   name: string
   defaultMatcap?: string

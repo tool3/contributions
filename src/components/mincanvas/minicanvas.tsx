@@ -72,7 +72,7 @@ export default function CanvasWithModel({
         <Suspense fallback={null}>{children}</Suspense>
         <Environment
           environmentIntensity={0.8}
-          files={'/textures/environments/autumn_field_1k.hdr'}
+          files={'/textures/environments/studio_small_03_1k.hdr'}
         />
         <OrbitControls
           autoRotate={rotate}
