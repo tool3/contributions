@@ -76,7 +76,7 @@ export default function Effects() {
   )
 
   return enabled ? (
-    <EffectComposer stencilBuffer autoClear>
+    <EffectComposer multisampling={2} stencilBuffer autoClear>
       {bloomEnabled ? (
         <Bloom
           mipmapBlur
