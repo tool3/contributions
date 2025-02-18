@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import { Environment, OrbitControls, Stats } from '@react-three/drei'
 import { Canvas, Vector3 } from '@react-three/fiber'
-import { Leva, useControls } from 'leva'
+import { button, Leva, useControls } from 'leva'
 import { Perf } from 'r3f-perf'
 import { ReactNode, Suspense, useRef, useState } from 'react'
 
@@ -39,7 +39,10 @@ export default function CanvasWithModel({
     'general',
     {
       perf: false,
-      rotate: true
+      rotate: true,
+      ['reset camera']: button(() => {
+        target.current.reset()
+      })
     },
     { order: -1 }
   )
