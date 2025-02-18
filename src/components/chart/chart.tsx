@@ -107,9 +107,10 @@ const ContributionGrid = ({
       <group position={[0, 0, -6]}>
         {contributions.map((day, i) => {
           if (!day) return null
+
           const color = new Color(getColor(day.contributionCount))
           const height =
-            day.contributionCount > 0 ? day.contributionCount * 0.2 : 0.5
+            day.contributionCount > 0 ? day.contributionCount * 0.3 : 0.2
           const emissiveIntensity = Math.min(2, day.contributionCount / 10)
           const week = Math.floor(i / 7)
           const weekday = i % 7
