@@ -130,4 +130,9 @@ $circle-size: 70px;
   svg {
     font-size: 1.5rem;
   }
+
+  @media screen and (width <= 800px) {
+    top: 5px;
+    right: 5px;
+  }
 }

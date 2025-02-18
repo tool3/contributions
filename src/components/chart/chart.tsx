@@ -225,7 +225,7 @@ const ContributionVisualizer = ({
         {...textProps}
         height={0.3}
         size={1}
-        position={[21.5, 0, 5]}
+        position={[22, 0, 5]}
         material={yearTextMaterial}
       >
         {yearDisplay}
