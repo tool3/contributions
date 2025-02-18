@@ -8,10 +8,10 @@ import { useControls } from 'leva'
 import { Suspense, useLayoutEffect, useMemo, useRef } from 'react'
 import { Color, DoubleSide, MeshStandardMaterial } from 'three'
 
+import useMatcaps from '../../ts/hooks/use-matcaps'
 import Grid from '../grid/grid'
 import Effects from '../mincanvas/effects'
 import CanvasWithModel from '../mincanvas/minicanvas'
-import useMatcaps from './use-matcaps'
 
 interface Contribution {
   date: string
