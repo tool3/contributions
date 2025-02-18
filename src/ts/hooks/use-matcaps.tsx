@@ -29,7 +29,8 @@ export default function useMatcaps({
   })
   const isDefault = matcap.matcap === 'matcap_placeholder.png'
   const [map] = useLoader(TextureLoader, [`/textures/matcaps/${matcap.matcap}`])
-  useLoader.preload(TextureLoader, `/textures/matcaps/${matcap.matcap}`)
 
   return isDefault ? material : new MeshMatcapMaterial({ matcap: map })
 }
+
+useLoader.preload(TextureLoader, '/textures/matcaps/matcap_61')

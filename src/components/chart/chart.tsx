@@ -146,6 +146,7 @@ const ContributionVisualizer = ({
   )
 
   const yearDisplay = year === 'default' ? new Date().getFullYear() : year
+
   const { material: textMaterialOptions, color: textMaterialColor } =
     useControls('text', {
       material: {
@@ -157,6 +158,7 @@ const ContributionVisualizer = ({
       },
       color: '#39d353'
     })
+
   const { material: yearMaterialOptions } = useControls('year', {
     material: {
       value: 'standard',
