@@ -19,7 +19,11 @@ interface Contribution {
   contributionCount: number
 }
 
-function exportStl(scene: any) {
+function getYear(year: string) {
+  return year.toLowerCase() === 'default' ? new Date().getFullYear() : year
+}
+
+function exportStl(scene: any, binary: boolean = false) {
   const exporter = new STLExporter()
   let temp = new Object3D()
   scene.traverse((node: any) => {
@@ -29,16 +33,23 @@ function exportStl(scene: any) {
       node.remove(child)
     }
   })
-  const str = exporter
-    .parse(scene)
-    .replace(/\t/g, '  ')
-    .replace(/-?\d+\.\d+e[-+]?\d+|-?\d*\.\d+/g, (num) => {
-      return parseFloat(num).toFixed(2)
-    })
+  const str = binary
+    ? exporter.parse(scene, { binary: true })
+    : exporter
+        .parse(scene)
+        .replace(/\t/g, '  ')
+        .replace(/-?\d+\.\d+e[-+]?\d+|-?\d*\.\d+/g, (num) => {
+          return parseFloat(num).toFixed(2)
+        })
+
+  const username = document.querySelector('input')?.value
+  const yearValue = document.querySelector('select')?.value
+  const year = getYear(yearValue!)
+
   const blob = new Blob([str], { type: 'application/octet-stream' })
   const link = document.createElement('a')
   link.href = URL.createObjectURL(blob)
-  link.download = 'scene.stl'
+  link.download = `${username}_${year}.stl`
   link.click()
   scene.traverse((node: any) => {
     if (node.name === 'grid_parent') {
@@ -93,6 +104,33 @@ const ContributionGrid = ({
     ['export stl']: button(() => exportStl(scene))
   })
 
+  useLayoutEffect(() => {
+    /* @ts-ignore */
+    addEventListener('stl', (e: CustomEvent) =>
+      exportStl(scene, e.detail.binary)
+    )
+    return () => removeEventListener('stl', () => exportStl(scene))
+  }, [])
+
+  useLayoutEffect(() => {
+    if (controls && contributions.length) {
+      controls.autoRotate = false
+      controls.enabled = true
+      gsap.to(camera.position, {
+        x: 0,
+        y: 130,
+        z: 100,
+        duration: 2,
+        delay: 1,
+        ease: 'expo',
+        onComplete: () => {
+          controls.autoRotate = true
+          camera.lookAt([0, 0, 0])
+        }
+      })
+    }
+  }, [controls, camera, contributions])
+
   const colors = useControls('bars', {
     none: '#161b22',
     ten: '#0e4429',
@@ -116,25 +154,6 @@ const ContributionGrid = ({
     if (count >= 1) return GITHUB_COLORS[1]
     return GITHUB_COLORS[0]
   }
-
-  useLayoutEffect(() => {
-    if (controls && contributions.length) {
-      controls.autoRotate = false
-      controls.enabled = true
-      gsap.to(camera.position, {
-        x: 0,
-        y: 130,
-        z: 100,
-        duration: 2,
-        delay: 1,
-        ease: 'expo',
-        onComplete: () => {
-          controls.autoRotate = true
-          camera.lookAt([0, 0, 0])
-        }
-      })
-    }
-  }, [controls, camera, contributions])
 
   const baseMaterial = useMemo(() => new MeshStandardMaterial(), [])
   const barsMatcapMaterial = useMatcaps({ name: 'bars' })
@@ -207,8 +226,7 @@ const ContributionVisualizer = ({
     [contributions]
   )
 
-  const yearDisplay =
-    year.toLowerCase() === 'default' ? new Date().getFullYear() : year
+  const yearDisplay = getYear(year)
 
   const font = {
     value: '/fonts/json/Geist_Mono_Regular.json',

@@ -2,10 +2,10 @@
 import gsap from 'gsap'
 import { useLayoutEffect, useState } from 'react'
 
-import Capture from '../capture/capture'
+import CaptureSelect from '../capture/capture-select'
+import Footer from '../footer/footer'
 import YearSelector from '../year-select/year-select'
 import s from './user.module.scss'
-import Footer from '../footer/footer'
 
 export default function User({
   handleSubmit,
@@ -80,7 +80,7 @@ export default function User({
             </form>
             <div className={s.selector}>
               <YearSelector year={year} setYear={setYear} />
-              <Capture canvasRef={canvasRef} />
+              <CaptureSelect canvasRef={canvasRef} />
             </div>
           </div>
           <Footer />
