@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { getYear } from '~/lib/utils'
+
 import styles from './capture-select.module.scss'
 
-const CaptureSelect = ({ canvasRef }) => {
+const CaptureSelect = ({ canvasRef, year: baseYear, username }) => {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef(null) as any
+
+  const year = getYear(baseYear)
 
   const handlePNG = () => {
     if (!canvasRef.current) return
@@ -20,14 +24,16 @@ const CaptureSelect = ({ canvasRef }) => {
 
     const link = document.createElement('a')
     link.href = dataURL
-    link.download = 'contributions.png'
+    link.download = `${username}_${year}.png`
     link.click()
     link.remove()
   }
 
-  const handleSTL = (option) => {
+  const handleSTL = (option: string) => {
     const isBinary = option.includes('binary')
-    dispatchEvent(new CustomEvent('stl', { detail: { binary: isBinary } }))
+    dispatchEvent(
+      new CustomEvent('stl', { detail: { binary: isBinary, username, year } })
+    )
   }
 
   const toggleDropdown = () => setIsOpen(!isOpen)

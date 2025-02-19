@@ -78,7 +78,7 @@ export default function CanvasWithModel({
         <color attach={'background'} args={['#000']} />
         <Suspense fallback={null}>{children}</Suspense>
         <Environment
-          environmentIntensity={0.8}
+          environmentIntensity={0.9}
           files={'/textures/environments/studio_small_03_1k.hdr'}
         />
         <OrbitControls

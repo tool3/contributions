@@ -30,7 +30,7 @@ export default function Grid({ active = true }: { active?: boolean }) {
 
   const { color } = useControls('pulse', {
     color: {
-      value: '#00ff00',
+      value: '#39d353',
       onEditEnd: (val) => {
         shader.current.uniforms.uColor.value = new Color(val)
       }

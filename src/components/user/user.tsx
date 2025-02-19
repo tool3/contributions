@@ -80,7 +80,11 @@ export default function User({
             </form>
             <div className={s.selector}>
               <YearSelector year={year} setYear={setYear} />
-              <CaptureSelect canvasRef={canvasRef} />
+              <CaptureSelect
+                year={year}
+                username={username}
+                canvasRef={canvasRef}
+              />
             </div>
           </div>
           <Footer />

@@ -41,3 +41,7 @@ export const getSizes = (
 
   return sizes.join(', ')
 }
+
+export function getYear(year: string) {
+  return year.toLowerCase() === 'default' ? new Date().getFullYear() : year
+}

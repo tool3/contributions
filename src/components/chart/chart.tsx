@@ -4,10 +4,12 @@
 import { Center, Text3D } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
-import { button, useControls } from 'leva'
+import { useControls } from 'leva'
 import { Suspense, useLayoutEffect, useMemo, useRef } from 'react'
 import { Color, DoubleSide, MeshStandardMaterial, Object3D } from 'three'
 import { STLExporter } from 'three-stdlib'
+
+import { getYear } from '~/lib/utils'
 
 import useMatcaps from '../../ts/hooks/use-matcaps'
 import Grid from '../grid/grid'
@@ -19,11 +21,7 @@ interface Contribution {
   contributionCount: number
 }
 
-function getYear(year: string) {
-  return year.toLowerCase() === 'default' ? new Date().getFullYear() : year
-}
-
-function exportStl(scene: any, binary: boolean = false) {
+function exportStl(scene: any, { binary = false, username, year }) {
   const exporter = new STLExporter()
   let temp = new Object3D()
   scene.traverse((node: any) => {
@@ -41,10 +39,6 @@ function exportStl(scene: any, binary: boolean = false) {
         .replace(/-?\d+\.\d+e[-+]?\d+|-?\d*\.\d+/g, (num) => {
           return parseFloat(num).toFixed(2)
         })
-
-  const username = document.querySelector('input')?.value
-  const yearValue = document.querySelector('select')?.value
-  const year = getYear(yearValue!)
 
   const blob = new Blob([str], { type: 'application/octet-stream' })
   const link = document.createElement('a')
@@ -65,6 +59,7 @@ function Box({ material, height, i, position }) {
     if (ref.current) {
       ref.current.position.y = 0
       ref.current.scale.y = 0
+
       gsap.to(ref.current.scale, {
         y: 1,
         delay: 2,
@@ -100,16 +95,17 @@ const ContributionGrid = ({
   const three = useThree() as any
   const { controls, camera, scene } = three
 
-  useControls('general', {
-    ['export stl']: button(() => exportStl(scene))
-  })
-
   useLayoutEffect(() => {
     /* @ts-ignore */
-    addEventListener('stl', (e: CustomEvent) =>
-      exportStl(scene, e.detail.binary)
+    addEventListener(
+      'stl',
+      ({ detail: { binary, year, username } }: CustomEvent) =>
+        exportStl(scene, { binary, username, year })
     )
-    return () => removeEventListener('stl', () => exportStl(scene))
+    return () =>
+      removeEventListener('stl', () =>
+        exportStl(scene, { binary: false, username: '', year: '' })
+      )
   }, [])
 
   useLayoutEffect(() => {
@@ -175,7 +171,7 @@ const ContributionGrid = ({
 
           const color = new Color(getColor(day.contributionCount))
           const height =
-            day.contributionCount > 0 ? day.contributionCount * 0.3 : 0.2
+            day.contributionCount > 0 ? day.contributionCount * 0.3 : 0
           const emissiveIntensity = Math.min(1, day.contributionCount / 10)
           const week = Math.floor(i / 7)
           const weekday = i % 7
@@ -252,7 +248,7 @@ const ContributionVisualizer = ({
     font: textFont,
     material: textMaterialOptions,
     color: textMaterialColor
-  } = useControls('text', {
+  } = useControls('username', {
     material,
     color,
     font
@@ -289,7 +285,7 @@ const ContributionVisualizer = ({
       }),
     [yearMaterialColor]
   )
-  const textMatcapMaterial = useMatcaps({ name: 'text' })
+  const textMatcapMaterial = useMatcaps({ name: 'username' })
   const yearMatcapMaterial = useMatcaps({ name: 'year' })
 
   const usernameTextMaterial =
