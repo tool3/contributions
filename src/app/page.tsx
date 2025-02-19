@@ -25,11 +25,12 @@ export default function Page() {
     setError(null)
 
     try {
-      const isYear = year !== 'default';
+      const isYear = year.toLowerCase() !== 'default'
       const yearQuery = isYear ? `&year=${year}` : ''
       const response = await fetch(
         `/api/contributions?username=${username}${yearQuery}`
       )
+
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(

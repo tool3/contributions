@@ -8,24 +8,26 @@ $shadow-dark: rgba(0, 0, 0, 0.4);
 $circle-size: 70px;
 
 .yearSelect {
-  width: 100%;
   padding: 14px 16px;
   font-size: 1rem;
   font-weight: 600;
   color: $white;
-  // background-color: $accent;
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  background: $border-color;
   transition:
   background 0.3s ease,
   transform 0.2s ease;
   text-align: center;
   font-family: Alliance;
 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
   &:hover {
     background: $hover-accent;
-    transform: scale(1.05);
   }
 
   &:disabled {

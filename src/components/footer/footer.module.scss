@@ -1,0 +1,12 @@
+.footer {
+  font-family: GeistMono;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+
+  .credits {
+    margin-bottom: -1rem;
+  }
+}

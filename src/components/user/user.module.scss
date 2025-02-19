@@ -36,7 +36,7 @@ $circle-size: 70px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 15rem;
+    height: 12rem;
     margin-top: 1.5rem;
   }
 
@@ -137,4 +137,16 @@ $circle-size: 70px;
     top: 5px;
     right: 5px;
   }
+}
+
+.selector {
+  display: flex;
+  justify-content: space-between;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 17rem;
+  justify-content: space-between;
 }

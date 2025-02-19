@@ -4,9 +4,10 @@
 import { Center, Text3D } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
-import { useControls } from 'leva'
+import { button, useControls } from 'leva'
 import { Suspense, useLayoutEffect, useMemo, useRef } from 'react'
-import { Color, DoubleSide, MeshStandardMaterial } from 'three'
+import { Color, DoubleSide, MeshStandardMaterial, Object3D } from 'three'
+import { STLExporter } from 'three-stdlib'
 
 import useMatcaps from '../../ts/hooks/use-matcaps'
 import Grid from '../grid/grid'
@@ -18,20 +19,52 @@ interface Contribution {
   contributionCount: number
 }
 
+function exportStl(scene: any) {
+  const exporter = new STLExporter()
+  let temp = new Object3D()
+  scene.traverse((node: any) => {
+    if (node.name === 'grid_parent') {
+      const child = scene.getObjectByName('grid')
+      temp = child
+      node.remove(child)
+    }
+  })
+  const str = exporter
+    .parse(scene)
+    .replace(/\t/g, '  ')
+    .replace(/-?\d+\.\d+e[-+]?\d+|-?\d*\.\d+/g, (num) => {
+      return parseFloat(num).toFixed(2)
+    })
+  const blob = new Blob([str], { type: 'application/octet-stream' })
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  link.download = 'scene.stl'
+  link.click()
+  scene.traverse((node: any) => {
+    if (node.name === 'grid_parent') {
+      node.add(temp)
+    }
+  })
+}
+
 function Box({ material, height, i, position }) {
   const ref = useRef() as any
+
   useLayoutEffect(() => {
     if (ref.current) {
+      ref.current.position.y = 0
+      ref.current.scale.y = 0
       gsap.to(ref.current.scale, {
-        x: 1,
         y: 1,
-        z: 1,
-        delay: 3,
+        delay: 2,
         duration: 3,
-        ease: 'expo.out'
+        ease: 'expo.out',
+        onUpdate: () => {
+          ref.current.position.y = (ref.current.scale.y * height) / 2
+        }
       })
     }
-  }, [ref, i])
+  }, [ref, height, i])
 
   return (
     <mesh
@@ -54,7 +87,11 @@ const ContributionGrid = ({
   contributions: Contribution[]
 }) => {
   const three = useThree() as any
-  const { controls, camera } = three
+  const { controls, camera, scene } = three
+
+  useControls('general', {
+    ['export stl']: button(() => exportStl(scene))
+  })
 
   const colors = useControls('bars', {
     none: '#161b22',
@@ -112,7 +149,7 @@ const ContributionGrid = ({
   })
 
   return (
-    <>
+    <group name="grid_parent">
       <group position={[0, 0, -6]}>
         {contributions.map((day, i) => {
           if (!day) return null
@@ -150,7 +187,7 @@ const ContributionGrid = ({
         })}
       </group>
       <Grid active={contributions.length > 0} />
-    </>
+    </group>
   )
 }
 
@@ -170,28 +207,47 @@ const ContributionVisualizer = ({
     [contributions]
   )
 
-  const yearDisplay = year === 'default' ? new Date().getFullYear() : year
+  const yearDisplay =
+    year.toLowerCase() === 'default' ? new Date().getFullYear() : year
 
-  const { material: textMaterialOptions, color: textMaterialColor } =
-    useControls('text', {
-      material: {
-        value: 'standard',
-        options: {
-          standard: 'standard',
-          matcap: 'matcap'
-        }
-      },
-      color: '#39d353'
-    })
-
-  const { material: yearMaterialOptions } = useControls('year', {
-    material: {
-      value: 'standard',
-      options: {
-        standard: 'standard',
-        matcap: 'matcap'
-      }
+  const font = {
+    value: '/fonts/json/Geist_Mono_Regular.json',
+    options: {
+      GeistMono: '/fonts/json/Geist_Mono_Regular.json',
+      Grotesque: '/fonts/json/Grotesque_Regular.json',
+      Inter: '/fonts/json/Inter_Bold.json',
+      Monaspace: '/fonts/json/Monaspace_Argon_Bold.json'
     }
+  }
+
+  const material = {
+    value: 'standard',
+    options: {
+      standard: 'standard',
+      matcap: 'matcap'
+    }
+  }
+
+  const color = '#39d353'
+
+  const {
+    font: textFont,
+    material: textMaterialOptions,
+    color: textMaterialColor
+  } = useControls('text', {
+    material,
+    color,
+    font
+  })
+
+  const {
+    font: yearFont,
+    material: yearMaterialOptions,
+    color: yearMaterialColor
+  } = useControls('year', {
+    material,
+    color,
+    font
   })
 
   const textMaterial = useMemo(
@@ -204,13 +260,24 @@ const ContributionVisualizer = ({
       }),
     [textMaterialColor]
   )
+
+  const yearMaterial = useMemo(
+    () =>
+      new MeshStandardMaterial({
+        emissiveIntensity: 0.5,
+        color: yearMaterialColor,
+        emissive: yearMaterialColor,
+        side: DoubleSide
+      }),
+    [yearMaterialColor]
+  )
   const textMatcapMaterial = useMatcaps({ name: 'text' })
   const yearMatcapMaterial = useMatcaps({ name: 'year' })
 
   const usernameTextMaterial =
     textMaterialOptions === 'standard' ? textMaterial : textMatcapMaterial
   const yearTextMaterial =
-    yearMaterialOptions === 'standard' ? textMaterial : yearMatcapMaterial
+    yearMaterialOptions === 'standard' ? yearMaterial : yearMatcapMaterial
 
   const textProps = {
     curveSegments: 32,
@@ -219,7 +286,6 @@ const ContributionVisualizer = ({
     bevelThickness: 0.1,
     height: 0.5,
     size: 2,
-    font: '/fonts/json/Geist_Mono_Regular.json',
     rotation: [-Math.PI / 2, 0, 0] as any
   }
 
@@ -236,6 +302,7 @@ const ContributionVisualizer = ({
         <Text3D
           name={'username'}
           {...textProps}
+          font={textFont}
           position={[-Math.floor(username.length / 2 + offsetText), 0, 6]}
           material={usernameTextMaterial}
         >
@@ -245,6 +312,7 @@ const ContributionVisualizer = ({
       <Text3D
         name={'year'}
         {...textProps}
+        font={yearFont}
         height={0.3}
         size={1}
         position={[22, 0, 5]}
