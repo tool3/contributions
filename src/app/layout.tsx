@@ -18,11 +18,11 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-body' })
 
 export const metadata: Metadata = {
   title: {
-    default: 'Contributions | Tal Hayut',
+    default: 'Github 3D Contributions | tool3',
     template: '%s | Tal Hayut'
   },
   metadataBase: siteURL,
-  description: `visualize github contribution graph in 3D`,
+  description: `Github contribution graph in 3D`,
   icons: [
     {
       rel: 'apple-touch-icon',
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
   manifest: '/manifest.webmanifest',
   twitter: {
     card: 'summary_large_image',
-    title: 'contributions',
+    title: 'Github 3D Contributions',
     creator: 'talhayut',
-    siteId: 'contributions'
+    siteId: 'g3c'
   }
 }
 
