@@ -83,6 +83,7 @@ export default function CanvasWithModel({
         />
         <OrbitControls
           autoRotate={rotate}
+          autoRotateSpeed={0.5}
           ref={target}
           makeDefault
           enabled={orbitEnabled}

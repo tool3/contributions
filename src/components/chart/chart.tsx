@@ -18,7 +18,7 @@ interface Contribution {
   contributionCount: number
 }
 
-function Box({ color, height, emissiveIntensity, i, position }) {
+function Box({ material, height, i, position }) {
   const ref = useRef() as any
   useLayoutEffect(() => {
     if (ref.current) {
@@ -41,13 +41,9 @@ function Box({ color, height, emissiveIntensity, i, position }) {
       receiveShadow
       key={i}
       position={position}
+      material={material}
     >
       <boxGeometry args={[0.8, height, 0.8]} />
-      <meshStandardMaterial
-        color={color}
-        emissive={color}
-        emissiveIntensity={emissiveIntensity}
-      />
     </mesh>
   )
 }
@@ -103,6 +99,18 @@ const ContributionGrid = ({
     }
   }, [controls, camera, contributions])
 
+  const baseMaterial = useMemo(() => new MeshStandardMaterial(), [])
+  const barsMatcapMaterial = useMatcaps({ name: 'bars' })
+  const { material: barsMaterialOptions } = useControls('bars', {
+    material: {
+      value: 'standard',
+      options: {
+        standard: 'standard',
+        matcap: 'matcap'
+      }
+    }
+  })
+
   return (
     <>
       <group position={[0, 0, -6]}>
@@ -117,11 +125,25 @@ const ContributionGrid = ({
           const weekday = i % 7
           const position = [week - 26, height / 2, weekday + 3]
 
+          const getBaseMaterial = () => {
+            const material = baseMaterial.clone()
+            material.color = color
+            material.emissive = color
+            material.emissiveIntensity = emissiveIntensity
+            return material
+          }
+
+          const material =
+            barsMaterialOptions === 'standard'
+              ? getBaseMaterial()
+              : barsMatcapMaterial
+
           const props = {
             color,
             height,
             emissiveIntensity,
             i,
+            material,
             position
           }
           return <Box key={i} {...props} />
