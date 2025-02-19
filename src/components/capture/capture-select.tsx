@@ -7,7 +7,7 @@ import styles from './capture-select.module.scss'
 const CaptureSelect = ({ canvasRef, year: baseYear, username }) => {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef(null) as any
-
+  const options = ['png', 'stl (ascii)', 'stl (binary)']
   const year = getYear(baseYear)
 
   const handlePNG = () => {
@@ -29,13 +29,6 @@ const CaptureSelect = ({ canvasRef, year: baseYear, username }) => {
     link.remove()
   }
 
-  const handleSTL = (option: string) => {
-    const isBinary = option.includes('binary')
-    dispatchEvent(
-      new CustomEvent('stl', { detail: { binary: isBinary, username, year } })
-    )
-  }
-
   const toggleDropdown = () => setIsOpen(!isOpen)
 
   const handleSelect = (option) => {
@@ -43,8 +36,24 @@ const CaptureSelect = ({ canvasRef, year: baseYear, username }) => {
 
     if (option === 'png') {
       handlePNG()
-    } else {
-      handleSTL(option)
+    } else if (option === 'stl (ascii)') {
+      dispatchEvent(
+        new CustomEvent('stl-export', {
+          detail: { binary: false, username, year }
+        })
+      )
+    } else if (option === 'stl (binary)') {
+      dispatchEvent(
+        new CustomEvent('stl-export', {
+          detail: { binary: true, username, year }
+        })
+      )
+    } else if (option === 'svg') {
+      dispatchEvent(
+        new CustomEvent('svg-export', {
+          detail: { username, year }
+        })
+      )
     }
   }
 
@@ -85,7 +94,7 @@ const CaptureSelect = ({ canvasRef, year: baseYear, username }) => {
 
       {isOpen && (
         <ul className={styles.dropdown}>
-          {['png', 'stl (ascii)', 'stl (binary)'].map((option) => (
+          {options.map((option) => (
             <li
               key={option}
               onClick={() => handleSelect(option)}

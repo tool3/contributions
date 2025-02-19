@@ -1,13 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/no-unknown-property */
 'use client'
 
-/* eslint-disable react/no-unknown-property */
 import { Center, Text3D } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
 import { useControls } from 'leva'
 import { Suspense, useLayoutEffect, useMemo, useRef } from 'react'
 import { Color, DoubleSide, MeshStandardMaterial, Object3D } from 'three'
-import { STLExporter } from 'three-stdlib'
+import { STLExporter, SVGRenderer } from 'three-stdlib'
 
 import { getYear } from '~/lib/utils'
 
@@ -45,6 +46,50 @@ function exportStl(scene: any, { binary = false, username, year }) {
   link.href = URL.createObjectURL(blob)
   link.download = `${username}_${year}.stl`
   link.click()
+  link.remove()
+  scene.traverse((node: any) => {
+    if (node.name === 'grid_parent') {
+      node.add(temp)
+    }
+  })
+}
+
+function exportSVG(scene, camera, { username, year }) {
+  const renderer = new SVGRenderer()
+
+  let temp = new Object3D()
+  scene.traverse((node: any) => {
+    if (node.name === 'grid_parent') {
+      const child = scene.getObjectByName('grid')
+      temp = child
+      node.remove(child)
+    }
+  })
+
+  renderer.setSize(window.innerWidth, window.innerHeight)
+  renderer.setPrecision(0.001)
+  renderer.setQuality('high')
+  renderer.render(scene, camera)
+
+  renderer.domElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+
+  const XMLS = new XMLSerializer()
+  const svgfile = XMLS.serializeToString(renderer.domElement)
+  const svgData = svgfile
+
+  const svgBlob = new Blob([svgData], {
+    type: 'image/svg+xml'
+  })
+
+  const svgUrl = URL.createObjectURL(svgBlob)
+  const link = document.createElement('a')
+
+  link.href = svgUrl
+  link.download = `${username}_${year}.svg`
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+
   scene.traverse((node: any) => {
     if (node.name === 'grid_parent') {
       node.add(temp)
@@ -62,7 +107,7 @@ function Box({ material, height, i, position }) {
 
       gsap.to(ref.current.scale, {
         y: 1,
-        delay: 2,
+        delay: 1,
         duration: 3,
         ease: 'expo.out',
         onUpdate: () => {
@@ -87,6 +132,23 @@ function Box({ material, height, i, position }) {
   )
 }
 
+function Base() {
+  const { color, metalness, roughness } = useControls('box', {
+    color: '#161b22',
+    metalness: { value: 1, min: 0, max: 1 },
+    roughness: { value: 0.75, min: 0, max: 1 }
+  })
+  return (
+    <mesh position={[0, 0.5, 0]}>
+      <boxGeometry args={[53, 1, 7]} />
+      <meshStandardMaterial
+        color={color}
+        metalness={metalness}
+        roughness={roughness}
+      />
+    </mesh>
+  )
+}
 const ContributionGrid = ({
   contributions
 }: {
@@ -97,15 +159,21 @@ const ContributionGrid = ({
 
   useLayoutEffect(() => {
     /* @ts-ignore */
-    addEventListener(
-      'stl',
-      ({ detail: { binary, year, username } }: CustomEvent) =>
-        exportStl(scene, { binary, username, year })
+    addEventListener('stl-export', ({ detail: options }: CustomEvent) =>
+      exportStl(scene, options)
     )
-    return () =>
-      removeEventListener('stl', () =>
+    /* @ts-ignore */
+    addEventListener('svg-export', ({ detail: options }: CustomEvent) =>
+      exportSVG(scene, camera, options)
+    )
+    return () => {
+      removeEventListener('stl-export', () =>
         exportStl(scene, { binary: false, username: '', year: '' })
       )
+      removeEventListener('svg-export', () =>
+        exportSVG(scene, camera, { username: '', year: '' })
+      )
+    }
   }, [])
 
   useLayoutEffect(() => {
@@ -165,7 +233,7 @@ const ContributionGrid = ({
 
   return (
     <group name="grid_parent">
-      <group position={[0, 0, -6]}>
+      <group position={[0, 1.01, -6]}>
         {contributions.map((day, i) => {
           if (!day) return null
 
@@ -202,6 +270,7 @@ const ContributionGrid = ({
         })}
       </group>
       <Grid active={contributions.length > 0} />
+      <Base />
     </group>
   )
 }
@@ -217,13 +286,6 @@ const ContributionVisualizer = ({
   year: string
   canvasRef: React.MutableRefObject<HTMLCanvasElement>
 }) => {
-  const contributionGrid = useMemo(
-    () => <ContributionGrid contributions={contributions} />,
-    [contributions]
-  )
-
-  const yearDisplay = getYear(year)
-
   const font = {
     value: '/fonts/json/Geist_Mono_Regular.json',
     options: {
@@ -304,6 +366,12 @@ const ContributionVisualizer = ({
   }
 
   const offsetText = username.length % 2 === 0 ? username.length / 4 : 2
+  const yearDisplay = contributions.length ? getYear(year) : ''
+
+  const contributionGrid = useMemo(
+    () => <ContributionGrid contributions={contributions} />,
+    [contributions]
+  )
 
   return (
     <CanvasWithModel

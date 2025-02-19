@@ -79,6 +79,7 @@ export default function CanvasWithModel({
         <Suspense fallback={null}>{children}</Suspense>
         <Environment
           environmentIntensity={0.9}
+          environmentRotation={[0, Math.PI / 4, 0]}
           files={'/textures/environments/studio_small_03_1k.hdr'}
         />
         <OrbitControls

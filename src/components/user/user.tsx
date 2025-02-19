@@ -61,7 +61,7 @@ export default function User({
         {isShrunk ? '☰' : '✕'}
       </button>
       <div className={s.user}>
-        <h1>Github Contribution Visualization</h1>
+        <h1>Github 3D Contributions</h1>
         <div className={s.wrapper}>
           <div className={s.content}>
             <form onSubmit={handleSubmit}>
