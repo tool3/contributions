@@ -107,9 +107,9 @@ function Box({ material, height, i, position }) {
 
       gsap.to(ref.current.scale, {
         y: 1,
-        delay: 1,
-        duration: 3,
-        ease: 'expo.out',
+        delay: 2,
+        duration: 1,
+        ease: 'back.inOut',
         onUpdate: () => {
           ref.current.position.y = (ref.current.scale.y * height) / 2
         }
@@ -119,9 +119,10 @@ function Box({ material, height, i, position }) {
 
   return (
     <mesh
+      name={'box'}
       ref={ref}
       castShadow
-      scale={[1, 1, 1]}
+      scale={[1, 0, 1]}
       receiveShadow
       key={i}
       position={position}
