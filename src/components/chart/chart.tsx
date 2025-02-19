@@ -133,11 +133,15 @@ function Box({ material, height, i, position }) {
 }
 
 function Base() {
-  const { color, metalness, roughness } = useControls('box', {
-    color: '#161b22',
-    metalness: { value: 1, min: 0, max: 1 },
-    roughness: { value: 0.75, min: 0, max: 1 }
-  })
+  const { color, metalness, roughness } = useControls(
+    'box',
+    {
+      color: '#161b22',
+      metalness: { value: 1, min: 0, max: 1 },
+      roughness: { value: 0.75, min: 0, max: 1 }
+    },
+    { collapsed: true }
+  )
   return (
     <mesh position={[0, 0.5, 0]}>
       <boxGeometry args={[53, 1, 7]} />
