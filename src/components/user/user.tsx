@@ -74,8 +74,9 @@ export default function User({
                 placeholder="Enter GitHub username"
                 required
               />
-              <button type="submit" disabled={loading}>
-                {loading ? 'Loading...' : 'Visualize'}
+              <button className={s.visualize} type="submit" disabled={loading}>
+                {loading ? <div className={s.spinner} /> : 'Visualize'}
+                {/* {<div className={s.spinner} />} */}
               </button>
             </form>
             <div className={s.selector}>
