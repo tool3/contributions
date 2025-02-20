@@ -139,7 +139,7 @@ function Base() {
     {
       color: '#161b22',
       metalness: { value: 1, min: 0, max: 1 },
-      roughness: { value: 0.75, min: 0, max: 1 }
+      roughness: { value: 0.9, min: 0, max: 1 }
     },
     { collapsed: true }
   )
@@ -154,6 +154,7 @@ function Base() {
     </mesh>
   )
 }
+
 const ContributionGrid = ({
   contributions
 }: {
@@ -275,7 +276,7 @@ const ContributionGrid = ({
         })}
       </group>
       <Grid active={contributions.length > 0} />
-      <Base />
+      {contributions.length ? <Base /> : null}
     </group>
   )
 }
