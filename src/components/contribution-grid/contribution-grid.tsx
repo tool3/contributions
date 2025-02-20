@@ -2,7 +2,7 @@
 import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
 import { useControls } from 'leva'
-import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useLayoutEffect, useMemo, useRef } from 'react'
 import { Color, MeshStandardMaterial, Object3D } from 'three'
 import { STLExporter, SVGRenderer } from 'three-stdlib'
 
@@ -90,7 +90,7 @@ function exportSVG(scene, camera, { username, year }) {
   })
 }
 
-function Bar({ material, height, i, position }) {
+function Bar({ name, material, height, i, position }) {
   const ref = useRef() as any
 
   useLayoutEffect(() => {
@@ -99,8 +99,7 @@ function Bar({ material, height, i, position }) {
       ref.current.scale.y = 0
       gsap.to(ref.current.scale, {
         y: 1,
-        delay: 1,
-        duration: 1,
+        duration: 1.5,
         ease: 'expo.inOut',
         onUpdate: () => {
           ref.current.position.y = (ref.current.scale.y * height) / 2
@@ -111,10 +110,9 @@ function Bar({ material, height, i, position }) {
 
   return (
     <mesh
-      name={'bar'}
+      name={name}
       ref={ref}
       castShadow
-      scale={[1, 1, 1]}
       receiveShadow
       key={i}
       position={position}
@@ -153,7 +151,6 @@ export default function ContributionGrid({
   contributions: Contribution[]
 }) {
   const three = useThree() as any
-  const [pristine, setPristine] = useState(true)
   const { controls, camera, scene } = three
 
   useLayoutEffect(() => {
@@ -176,7 +173,7 @@ export default function ContributionGrid({
   }, [])
 
   useLayoutEffect(() => {
-    if (controls && contributions.length && pristine) {
+    if (controls && contributions.length) {
       controls.autoRotate = false
       controls.enabled = true
       gsap.to(camera.position, {
@@ -184,24 +181,15 @@ export default function ContributionGrid({
         y: 130,
         z: 100,
         duration: 1,
-        delay: 0.5,
+        delay: 0,
         ease: 'expo.inOut',
         onComplete: () => {
           controls.autoRotate = true
           camera.lookAt([0, 0, 0])
         }
       })
-      setPristine(false)
     }
-
-    if (!pristine) {
-      const bars = scene.getObjectByName('bars').children
-      bars.forEach((bar) => {
-        bar.position.y = 0 
-        bar.scale.y = 0 
-    })
-    }
-  }, [controls, scene, camera, pristine, contributions])
+  }, [controls, scene, camera, contributions])
 
   const colors = useControls('bars', {
     none: '#161b22',
@@ -243,8 +231,7 @@ export default function ContributionGrid({
     <group name="grid_parent">
       <group position={[0, 1.01, -6]} name="bars">
         {contributions.map((day, i) => {
-          if (!day) return <></>
-
+          if (!day) return null
           const color = new Color(getColor(day.contributionCount))
           const height =
             day.contributionCount > 0 ? day.contributionCount * 0.3 : 0
@@ -267,10 +254,11 @@ export default function ContributionGrid({
               : barsMatcapMaterial
 
           const props = {
+            i,
+            name: 'bar',
             color,
             height,
             emissiveIntensity,
-            i,
             material,
             position
           }
