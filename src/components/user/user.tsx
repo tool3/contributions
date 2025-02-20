@@ -76,7 +76,6 @@ export default function User({
               />
               <button className={s.visualize} type="submit" disabled={loading}>
                 {loading ? <div className={s.spinner} /> : 'Visualize'}
-                {/* {<div className={s.spinner} />} */}
               </button>
             </form>
             <div className={s.selector}>

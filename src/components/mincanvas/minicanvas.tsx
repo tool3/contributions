@@ -33,7 +33,7 @@ export default function CanvasWithModel({
   const target = useRef([0, 0, 0]) as any
   const [active, setActive] = useState(panel)
   const { isMobile, isTablet } = useDeviceDetect()
-  const zoom = isMobile && !isTablet ? 13 : initZoom
+  const zoom = isMobile && !isTablet ? 7 : initZoom
 
   const { perf, rotate } = useControls(
     'general',
@@ -49,7 +49,7 @@ export default function CanvasWithModel({
 
   return (
     <>
-      <Leva hideCopyButton collapsed hidden={!active} />
+      <Leva hideCopyButton hidden={!active} />
       {perf ? <Stats /> : null}
       <Debug set={setActive} />
       <Canvas

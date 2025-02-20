@@ -16,6 +16,7 @@ export default function Page() {
   const [username, setUsername] = useState('')
   const [loading, setLoading] = useState(false)
   const [year, setYear] = useState('default')
+  const [lastQuery, setLastQuery] = useState('')
   const [error, setError] = useState<string | null>(null)
   const canvasRef = useRef() as React.MutableRefObject<HTMLCanvasElement>
 
@@ -27,18 +28,20 @@ export default function Page() {
     try {
       const isYear = year.toLowerCase() !== 'default'
       const yearQuery = isYear ? `&year=${year}` : ''
-      const response = await fetch(
-        `/api/contributions?username=${username}${yearQuery}`
-      )
+      const url = `/api/contributions?username=${username}${yearQuery}`
+      if (url !== lastQuery) {
+        const response = await fetch(url)
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(
-          errorData.message || `HTTP error! status: ${response.status}`
-        )
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(
+            errorData.message || `HTTP error! status: ${response.status}`
+          )
+        }
+        const data: Contribution[] = await response.json()
+        setContributions(data)
+        setLastQuery(url)
       }
-      const data: Contribution[] = await response.json()
-      setContributions(data)
     } catch (err: any) {
       setError(err.message)
       console.error('Error fetching contributions:', err)
