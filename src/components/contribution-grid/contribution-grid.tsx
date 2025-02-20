@@ -196,6 +196,7 @@ export default function ContributionGrid({
       value: '#39d353',
       onEditEnd: (value) => {
         const meta = document.querySelector('meta[name="theme-color"]')
+        document.documentElement.style.setProperty('--theme-color', value)
         if (meta) {
           meta.setAttribute('content', value)
         }
