@@ -191,6 +191,18 @@ export default function ContributionGrid({
     }
   }, [controls, scene, camera, contributions])
 
+  useControls('theme', {
+    color: {
+      value: '#39d353',
+      onEditEnd: (value) => {
+        const meta = document.querySelector('meta[name="theme-color"]')
+        if (meta) {
+          meta.setAttribute('content', value)
+        }
+      }
+    }
+  })
+
   const colors = useControls('bars', {
     none: '#161b22',
     ten: '#0e4429',
@@ -199,20 +211,12 @@ export default function ContributionGrid({
     forty: '#39d353'
   })
 
-  const GITHUB_COLORS = [
-    colors.none,
-    colors.ten,
-    colors.twenty,
-    colors.thirty,
-    colors.forty
-  ]
-
   const getColor = (count: number) => {
-    if (count >= 30) return GITHUB_COLORS[4]
-    if (count >= 20) return GITHUB_COLORS[3]
-    if (count >= 10) return GITHUB_COLORS[2]
-    if (count >= 1) return GITHUB_COLORS[1]
-    return GITHUB_COLORS[0]
+    if (count >= 30) return colors.forty
+    if (count >= 20) return colors.ten
+    if (count >= 10) return colors.twenty
+    if (count >= 1) return colors.thirty
+    return colors.none
   }
 
   const baseMaterial = useMemo(() => new MeshStandardMaterial(), [])
