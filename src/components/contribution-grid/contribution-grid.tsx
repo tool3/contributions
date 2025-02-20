@@ -214,9 +214,9 @@ export default function ContributionGrid({
 
   const getColor = (count: number) => {
     if (count >= 30) return colors.forty
-    if (count >= 20) return colors.ten
+    if (count >= 20) return colors.thirty
     if (count >= 10) return colors.twenty
-    if (count >= 1) return colors.thirty
+    if (count >= 1) return colors.ten
     return colors.none
   }
 
