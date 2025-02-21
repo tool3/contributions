@@ -4,7 +4,7 @@ $bg-color: #0d1117;
 $card-bg: rgba(255, 255, 255, 0.07);
 $border-color: rgba(255, 255, 255, 0.15);
 $accent: var(--theme-color);
-$hover-accent: #006d32;
+$hover-accent: var(--theme-color-hover);
 $white: #ffffff;
 $shadow-dark: rgba(0, 0, 0, 0.4);
 $circle-size: 70px;
@@ -123,10 +123,13 @@ $circle-size: 70px;
   align-items: center;
   cursor: pointer;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease-in-out;
+  transition:
+      background 0.3s ease,
+      transform 0.2s ease;
 
   &:hover {
     transform: scale(1.05);
+    background: var(--theme-color-hover);
   }
 
   svg {

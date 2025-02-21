@@ -50,7 +50,12 @@ export default function ContributionVisualizer({
       value: '#39d353',
       onEditEnd: (value) => {
         const meta = document.querySelector('meta[name="theme-color"]')
+        const darker = generateDarkerPalette(hexToRgb(value))[1]!
         document.documentElement.style.setProperty('--theme-color', value)
+        document.documentElement.style.setProperty(
+          '--theme-color-hover',
+          rgbToHex(darker)
+        )
         if (meta) {
           meta.setAttribute('content', value)
         }
