@@ -18,8 +18,9 @@ const CaptureSelect = ({ canvasRef, year: baseYear, username }) => {
     })
 
     const canvas = gl.canvas
+
     const dataURL = canvas
-      .toDataURL('image/png')
+      .toDataURL('image/png', 1.0)
       .replace('image/png', 'image/octet-stream')
 
     const link = document.createElement('a')
