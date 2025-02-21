@@ -148,7 +148,7 @@ export default function ContributionVisualizer({
         <Text3D
           name={'username'}
           {...textProps}
-          position={[-Math.floor(username.length / 2 + offsetText), 0.3, 4.2]}
+          position={[-Math.floor(username.length / 2 + offsetText), 0.35, 4.2]}
           material={textMaterial}
         >
           {username}
