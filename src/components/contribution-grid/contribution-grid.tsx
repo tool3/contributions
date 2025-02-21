@@ -15,9 +15,11 @@ function exportStl(scene: any, { binary = false, username, year }) {
   const exporter = new STLExporter()
 
   let temp = new Object3D()
+  const parent = scene.getObjectByName('grid_parent')
   const child = scene.getObjectByName('grid')
+
   temp = child
-  scene.remove(child)
+  parent.remove(child)
 
   const str = binary
     ? exporter.parse(scene, { binary: true })
@@ -33,19 +35,20 @@ function exportStl(scene: any, { binary = false, username, year }) {
   link.href = URL.createObjectURL(blob)
   link.download = `${username}_${year}.stl`
   link.click()
-
-  scene.add(temp)
-
   link.remove()
+
+  parent.add(temp)
 }
 
 function exportSVG(scene, camera, { username, year }) {
   const renderer = new SVGRenderer()
 
   let temp = new Object3D()
+  const parent = scene.getObjectByName('grid_parent')
   const child = scene.getObjectByName('grid')
+
   temp = child
-  scene.remove(child)
+  parent.remove(child)
 
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.setPrecision(0.001)
@@ -71,7 +74,7 @@ function exportSVG(scene, camera, { username, year }) {
   link.click()
   link.remove()
 
-  scene.add(temp)
+  parent.add(temp)
 }
 
 function Bar({ name, material, height, i, position }) {
@@ -158,40 +161,38 @@ export default function ContributionGrid({
   }, [controls, scene, camera, contributions])
 
   return (
-    <group name="grid_parent">
-      <group position={[0, 1.85, -6]} name="bars">
-        {contributions.map((day, i) => {
-          if (!day) return null
-          const color = new Color(getColor(day.contributionCount))
-          const height =
-            day.contributionCount > 0 ? day.contributionCount * 0.3 : 0
-          const emissiveIntensity = Math.min(1, day.contributionCount / 10)
-          const week = Math.floor(i / 7)
-          const weekday = i % 7
-          const position = [week - 26, height / 2, weekday + 3]
+    <group position={[0, 1.85, -6]} name="bars">
+      {contributions.map((day, i) => {
+        if (!day) return null
+        const color = new Color(getColor(day.contributionCount))
+        const height =
+          day.contributionCount > 0 ? day.contributionCount * 0.3 : 0
+        const emissiveIntensity = Math.min(1, day.contributionCount / 10)
+        const week = Math.floor(i / 7)
+        const weekday = i % 7
+        const position = [week - 26, height / 2, weekday + 3]
 
-          const getMaterial = () => {
-            const material = baseMaterial.clone()
-            if (!material.matcap) {
-              material.color = color
-              material.emissive = color
-              material.emissiveIntensity = emissiveIntensity
-            }
-            return material
+        const getMaterial = () => {
+          const material = baseMaterial.clone()
+          if (!material.matcap) {
+            material.color = color
+            material.emissive = color
+            material.emissiveIntensity = emissiveIntensity
           }
+          return material
+        }
 
-          const props = {
-            i,
-            name: 'bar',
-            color,
-            height,
-            emissiveIntensity,
-            material: getMaterial(),
-            position
-          }
-          return <Bar key={i} {...props} />
-        })}
-      </group>
+        const props = {
+          i,
+          name: 'bar',
+          color,
+          height,
+          emissiveIntensity,
+          material: getMaterial(),
+          position
+        }
+        return <Bar key={i} {...props} />
+      })}
     </group>
   )
 }

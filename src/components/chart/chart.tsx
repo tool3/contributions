@@ -134,7 +134,7 @@ export default function ContributionVisualizer({
       cameraPosition={[0, 50, 0]}
     >
       <Center>
-        <group>
+        <group name="grid_parent">
           <Suspense fallback={null}>{contributionGrid}</Suspense>
           {contributions.length ? (
             <BaseModel
@@ -143,8 +143,8 @@ export default function ContributionVisualizer({
               scale={[65.5, 40, 53]}
             />
           ) : null}
+          <Grid color={color} active={contributions.length > 0} />
         </group>
-        <Grid color={color} active={contributions.length > 0} />
         <Text3D
           name={'username'}
           {...textProps}
