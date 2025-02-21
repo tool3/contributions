@@ -55,7 +55,12 @@ export default function Grid({
 
   return (
     <Suspense fallback={null}>
-      <mesh name="grid" rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]}>
+      <mesh
+        visible={active}
+        name="grid"
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -0.1, 0]}
+      >
         <planeGeometry ref={planeRef} args={[70, 70, 1, 1]} />
         <shaderMaterial
           attach="material"

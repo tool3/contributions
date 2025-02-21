@@ -11,6 +11,7 @@ import { MeshStandardMaterial } from 'three'
 import { getYear } from '~/lib/utils'
 
 import useMatcaps from '../../ts/hooks/use-matcaps'
+import BaseModel from '../base/base'
 import ContributionGrid from '../contribution-grid/contribution-grid'
 import Grid from '../grid/grid'
 import Effects from '../mincanvas/effects'
@@ -110,9 +111,9 @@ export default function ContributionVisualizer({
     bevelSize: 0.04,
     bevelThickness: 0.1,
     height: 0.5,
-    size: 2,
+    size: 1.3,
     font: textFont,
-    rotation: [-Math.PI / 2, 0, 0] as any
+    rotation: [-Math.PI / 6.5, 0, 0] as any
   }
 
   const contributionGrid = useMemo(
@@ -133,12 +134,21 @@ export default function ContributionVisualizer({
       cameraPosition={[0, 50, 0]}
     >
       <Center>
-        <Suspense fallback={null}>{contributionGrid}</Suspense>
+        <group>
+          <Suspense fallback={null}>{contributionGrid}</Suspense>
+          {contributions.length ? (
+            <BaseModel
+              position={[0, 0.8, 0]}
+              rotation={[0, Math.PI, 0]}
+              scale={[65.5, 40, 53]}
+            />
+          ) : null}
+        </group>
         <Grid color={color} active={contributions.length > 0} />
         <Text3D
           name={'username'}
           {...textProps}
-          position={[-Math.floor(username.length / 2 + offsetText), 0, 6]}
+          position={[-Math.floor(username.length / 2 + offsetText), 0.3, 4.2]}
           material={textMaterial}
         >
           {username}
@@ -149,7 +159,7 @@ export default function ContributionVisualizer({
         {...textProps}
         height={0.3}
         size={1}
-        position={[22, 0, 5]}
+        position={[22, -0.3, 4]}
         material={textMaterial}
       >
         {yearDisplay}

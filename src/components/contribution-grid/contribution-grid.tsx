@@ -2,7 +2,6 @@
 /* eslint-disable react/no-unknown-property */
 import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
-import { useControls } from 'leva'
 import { useLayoutEffect, useRef } from 'react'
 import { Color, Object3D } from 'three'
 import { STLExporter, SVGRenderer } from 'three-stdlib'
@@ -14,14 +13,12 @@ interface Contribution {
 
 function exportStl(scene: any, { binary = false, username, year }) {
   const exporter = new STLExporter()
+
   let temp = new Object3D()
-  scene.traverse((node: any) => {
-    if (node.name === 'grid_parent') {
-      const child = scene.getObjectByName('grid')
-      temp = child
-      node.remove(child)
-    }
-  })
+  const child = scene.getObjectByName('grid')
+  temp = child
+  scene.remove(child)
+
   const str = binary
     ? exporter.parse(scene, { binary: true })
     : exporter
@@ -36,25 +33,19 @@ function exportStl(scene: any, { binary = false, username, year }) {
   link.href = URL.createObjectURL(blob)
   link.download = `${username}_${year}.stl`
   link.click()
+
+  scene.add(temp)
+
   link.remove()
-  scene.traverse((node: any) => {
-    if (node.name === 'grid_parent') {
-      node.add(temp)
-    }
-  })
 }
 
 function exportSVG(scene, camera, { username, year }) {
   const renderer = new SVGRenderer()
 
   let temp = new Object3D()
-  scene.traverse((node: any) => {
-    if (node.name === 'grid_parent') {
-      const child = scene.getObjectByName('grid')
-      temp = child
-      node.remove(child)
-    }
-  })
+  const child = scene.getObjectByName('grid')
+  temp = child
+  scene.remove(child)
 
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.setPrecision(0.001)
@@ -80,11 +71,7 @@ function exportSVG(scene, camera, { username, year }) {
   link.click()
   link.remove()
 
-  scene.traverse((node: any) => {
-    if (node.name === 'grid_parent') {
-      node.add(temp)
-    }
-  })
+  scene.add(temp)
 }
 
 function Bar({ name, material, height, i, position }) {
@@ -116,28 +103,6 @@ function Bar({ name, material, height, i, position }) {
       material={material}
     >
       <boxGeometry args={[0.8, height, 0.8]} />
-    </mesh>
-  )
-}
-
-function Base() {
-  const { color, metalness, roughness } = useControls(
-    'box',
-    {
-      color: '#161b22',
-      metalness: { value: 1, min: 0, max: 1 },
-      roughness: { value: 0.9, min: 0, max: 1 }
-    },
-    { collapsed: true }
-  )
-  return (
-    <mesh position={[0, 0.5, 0]}>
-      <boxGeometry args={[53, 1, 7]} />
-      <meshStandardMaterial
-        color={color}
-        metalness={metalness}
-        roughness={roughness}
-      />
     </mesh>
   )
 }
@@ -194,7 +159,7 @@ export default function ContributionGrid({
 
   return (
     <group name="grid_parent">
-      <group position={[0, 1.01, -6]} name="bars">
+      <group position={[0, 1.85, -6]} name="bars">
         {contributions.map((day, i) => {
           if (!day) return null
           const color = new Color(getColor(day.contributionCount))
@@ -227,7 +192,6 @@ export default function ContributionGrid({
           return <Bar key={i} {...props} />
         })}
       </group>
-      {contributions.length ? <Base /> : null}
     </group>
   )
 }
