@@ -6,7 +6,7 @@
 import { Center, Text3D } from '@react-three/drei'
 import { useControls } from 'leva'
 import { Suspense, useCallback, useMemo } from 'react'
-import { DoubleSide, MeshStandardMaterial } from 'three'
+import { MeshStandardMaterial } from 'three'
 
 import { getYear } from '~/lib/utils'
 

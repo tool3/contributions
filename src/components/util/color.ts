@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 function generateDarkerPalette({ r, g, b }) {
   // Convert RGB to HSL
   const { h, s, l } = rgbToHsl(r, g, b)
