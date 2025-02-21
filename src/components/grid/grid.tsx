@@ -1,14 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unknown-property */
 import { useFrame } from '@react-three/fiber'
-import { useControls } from 'leva'
-import { Suspense, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { Color, DoubleSide, Vector2 } from 'three'
 
 import fragmentShader from './shader/fragment.glsl'
 import vertexShader from './shader/vertex.glsl'
 
-export default function Grid({ active = true }: { active?: boolean }) {
+export default function Grid({
+  color: pulseColor,
+  active = true
+}: {
+  color: string
+  active?: boolean
+}) {
   const shader = useRef() as any
   const planeRef = useRef() as any
 
@@ -28,19 +33,16 @@ export default function Grid({ active = true }: { active?: boolean }) {
     sizes.height * sizes.pixelRatio
   )
 
-  const { color } = useControls('pulse', {
-    color: {
-      value: '#39d353',
-      onEditEnd: (val) => {
-        shader.current.uniforms.uColor.value = new Color(val)
-      }
+  useEffect(() => {
+    if (shader.current) {
+      shader.current.uniforms.uColor.value = new Color(pulseColor)
     }
-  })
+  }, [pulseColor])
 
   const uniforms = useMemo(
     () => ({
       uTime: { value: 0 },
-      uColor: { value: new Color(color) },
+      uColor: { value: new Color(pulseColor) },
       uResolution: {
         max: resolution,
         value: resolution

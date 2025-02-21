@@ -1,12 +1,11 @@
+/* eslint-disable prefer-const */
 /* eslint-disable react/no-unknown-property */
 import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
 import { useControls } from 'leva'
-import { useLayoutEffect, useMemo, useRef } from 'react'
-import { Color, MeshStandardMaterial, Object3D } from 'three'
+import { useLayoutEffect, useRef } from 'react'
+import { Color, Object3D } from 'three'
 import { STLExporter, SVGRenderer } from 'three-stdlib'
-
-import useMatcaps from '~/ts/hooks/use-matcaps'
 
 import Grid from '../grid/grid'
 
@@ -146,9 +145,15 @@ function Base() {
 }
 
 export default function ContributionGrid({
-  contributions
+  contributions,
+  getColor,
+  baseMaterial,
+  color
 }: {
   contributions: Contribution[]
+  getColor: any
+  baseMaterial: any
+  color: string
 }) {
   const three = useThree() as any
   const { controls, camera, scene } = three
@@ -191,47 +196,6 @@ export default function ContributionGrid({
     }
   }, [controls, scene, camera, contributions])
 
-  useControls('theme', {
-    color: {
-      value: '#39d353',
-      onEditEnd: (value) => {
-        const meta = document.querySelector('meta[name="theme-color"]')
-        document.documentElement.style.setProperty('--theme-color', value)
-        if (meta) {
-          meta.setAttribute('content', value)
-        }
-      }
-    }
-  })
-
-  const colors = useControls('bars', {
-    none: '#161b22',
-    ten: '#0e4429',
-    twenty: '#006d32',
-    thirty: '#26a641',
-    forty: '#39d353'
-  })
-
-  const getColor = (count: number) => {
-    if (count >= 30) return colors.forty
-    if (count >= 20) return colors.thirty
-    if (count >= 10) return colors.twenty
-    if (count >= 1) return colors.ten
-    return colors.none
-  }
-
-  const baseMaterial = useMemo(() => new MeshStandardMaterial(), [])
-  const barsMatcapMaterial = useMatcaps({ name: 'bars' })
-  const { material: barsMaterialOptions } = useControls('bars', {
-    material: {
-      value: 'standard',
-      options: {
-        standard: 'standard',
-        matcap: 'matcap'
-      }
-    }
-  })
-
   return (
     <group name="grid_parent">
       <group position={[0, 1.01, -6]} name="bars">
@@ -245,18 +209,15 @@ export default function ContributionGrid({
           const weekday = i % 7
           const position = [week - 26, height / 2, weekday + 3]
 
-          const getBaseMaterial = () => {
+          const getMaterial = () => {
             const material = baseMaterial.clone()
-            material.color = color
-            material.emissive = color
-            material.emissiveIntensity = emissiveIntensity
+            if (!material.matcap) {
+              material.color = color
+              material.emissive = color
+              material.emissiveIntensity = emissiveIntensity
+            }
             return material
           }
-
-          const material =
-            barsMaterialOptions === 'standard'
-              ? getBaseMaterial()
-              : barsMatcapMaterial
 
           const props = {
             i,
@@ -264,13 +225,13 @@ export default function ContributionGrid({
             color,
             height,
             emissiveIntensity,
-            material,
+            material: getMaterial(),
             position
           }
           return <Bar key={i} {...props} />
         })}
       </group>
-      <Grid active={contributions.length > 0} />
+      <Grid color={color} active={contributions.length > 0} />
       {contributions.length ? <Base /> : null}
     </group>
   )
