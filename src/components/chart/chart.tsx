@@ -159,7 +159,7 @@ export default function ContributionVisualizer({
         {...textProps}
         height={0.3}
         size={1}
-        position={[22, -0.3, 4]}
+        position={[22, 0.5, 4.2]}
         material={textMaterial}
       >
         {yearDisplay}
