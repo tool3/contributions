@@ -12,6 +12,7 @@ import { getYear } from '~/lib/utils'
 
 import useMatcaps from '../../ts/hooks/use-matcaps'
 import ContributionGrid from '../contribution-grid/contribution-grid'
+import Grid from '../grid/grid'
 import Effects from '../mincanvas/effects'
 import CanvasWithModel from '../mincanvas/minicanvas'
 import { generateDarkerPalette, hexToRgb, rgbToHex } from '../util/color'
@@ -118,7 +119,6 @@ export default function ContributionVisualizer({
     () => (
       <ContributionGrid
         baseMaterial={textMaterial}
-        color={color}
         getColor={getColor}
         contributions={contributions}
       />
@@ -134,6 +134,7 @@ export default function ContributionVisualizer({
     >
       <Center>
         <Suspense fallback={null}>{contributionGrid}</Suspense>
+        <Grid color={color} active={contributions.length > 0} />
         <Text3D
           name={'username'}
           {...textProps}

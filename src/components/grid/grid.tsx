@@ -8,7 +8,7 @@ import fragmentShader from './shader/fragment.glsl'
 import vertexShader from './shader/vertex.glsl'
 
 export default function Grid({
-  color: pulseColor,
+  color,
   active = true
 }: {
   color: string
@@ -24,8 +24,10 @@ export default function Grid({
   }
 
   useFrame(({ clock }) => {
-    const elapsedTime = clock.getElapsedTime()
-    if (shader.current) shader.current.uniforms.uTime.value = elapsedTime
+    if (active) {
+      const elapsedTime = clock.getElapsedTime()
+      if (shader.current) shader.current.uniforms.uTime.value = elapsedTime
+    }
   })
 
   const resolution = new Vector2(
@@ -35,14 +37,14 @@ export default function Grid({
 
   useEffect(() => {
     if (shader.current) {
-      shader.current.uniforms.uColor.value = new Color(pulseColor)
+      shader.current.uniforms.uColor.value = new Color(color)
     }
-  }, [pulseColor])
+  }, [color, shader])
 
   const uniforms = useMemo(
     () => ({
       uTime: { value: 0 },
-      uColor: { value: new Color(pulseColor) },
+      uColor: { value: new Color(color) },
       uResolution: {
         max: resolution,
         value: resolution
@@ -51,7 +53,7 @@ export default function Grid({
     []
   )
 
-  return active ? (
+  return (
     <Suspense fallback={null}>
       <mesh name="grid" rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]}>
         <planeGeometry ref={planeRef} args={[70, 70, 1, 1]} />
@@ -65,5 +67,5 @@ export default function Grid({
         />
       </mesh>
     </Suspense>
-  ) : null
+  )
 }

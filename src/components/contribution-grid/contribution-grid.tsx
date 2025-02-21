@@ -7,8 +7,6 @@ import { useLayoutEffect, useRef } from 'react'
 import { Color, Object3D } from 'three'
 import { STLExporter, SVGRenderer } from 'three-stdlib'
 
-import Grid from '../grid/grid'
-
 interface Contribution {
   date: string
   contributionCount: number
@@ -147,13 +145,11 @@ function Base() {
 export default function ContributionGrid({
   contributions,
   getColor,
-  baseMaterial,
-  color
+  baseMaterial
 }: {
   contributions: Contribution[]
   getColor: any
   baseMaterial: any
-  color: string
 }) {
   const three = useThree() as any
   const { controls, camera, scene } = three
@@ -231,7 +227,6 @@ export default function ContributionGrid({
           return <Bar key={i} {...props} />
         })}
       </group>
-      <Grid color={color} active={contributions.length > 0} />
       {contributions.length ? <Base /> : null}
     </group>
   )
