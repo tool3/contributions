@@ -134,6 +134,7 @@ export default function ContributionVisualizer({
       cameraPosition={[0, 50, 0]}
     >
       <Center>
+
         <group name="grid_parent">
           <Suspense fallback={null}>{contributionGrid}</Suspense>
           {contributions.length ? (
@@ -153,17 +154,18 @@ export default function ContributionVisualizer({
         >
           {username}
         </Text3D>
+
+        <Text3D
+          name={'year'}
+          {...textProps}
+          height={0.3}
+          size={1}
+          position={[22, 0.5, 4.2]}
+          material={textMaterial}
+        >
+          {yearDisplay}
+        </Text3D>
       </Center>
-      <Text3D
-        name={'year'}
-        {...textProps}
-        height={0.3}
-        size={1}
-        position={[22, 0.5, 4.2]}
-        material={textMaterial}
-      >
-        {yearDisplay}
-      </Text3D>
       <Effects />
     </CanvasWithModel>
   )
