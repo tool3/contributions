@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import {
   FormEvent,
   MutableRefObject,
+  Suspense,
   useLayoutEffect,
   useRef,
   useState
@@ -76,7 +77,7 @@ export default function Page() {
   }
 
   return (
-    <div>
+    <Suspense>
       <User {...props} />
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
       <ContributionChart
@@ -85,6 +86,6 @@ export default function Page() {
         username={username}
         contributions={contributions}
       />
-    </div>
+    </Suspense>
   )
 }
