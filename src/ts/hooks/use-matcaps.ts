@@ -12,7 +12,7 @@ const options = Array.from(
 
 export default function useMatcaps({
   name,
-  defaultMatcap = 'matcap_18.png'
+  defaultMatcap = 'matcap_18'
 }: {
   name: string
   defaultMatcap?: string
@@ -20,7 +20,7 @@ export default function useMatcaps({
   if (typeof document !== 'undefined') {
     const matcap = useControls(name, {
       matcap: {
-        value: defaultMatcap,
+        value: defaultMatcap + '.png',
         options
       }
     })

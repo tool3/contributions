@@ -1,6 +1,13 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import {
+  FormEvent,
+  MutableRefObject,
+  useLayoutEffect,
+  useRef,
+  useState
+} from 'react'
 
 import User from '~/components/user/user'
 
@@ -13,14 +20,15 @@ interface Contribution {
 
 export default function Page() {
   const [contributions, setContributions] = useState<Contribution[]>([])
-  const [username, setUsername] = useState('')
+  const params = useSearchParams()
+  const [username, setUsername] = useState(params.get('username') || '')
+  const [year, setYear] = useState(params.get('year') || 'default')
   const [loading, setLoading] = useState(false)
-  const [year, setYear] = useState('default')
   const [lastQuery, setLastQuery] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const canvasRef = useRef() as React.MutableRefObject<HTMLCanvasElement>
+  const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
@@ -49,6 +57,12 @@ export default function Page() {
       setLoading(false)
     }
   }
+
+  useLayoutEffect(() => {
+    if (username && year) {
+      handleSubmit({ preventDefault: () => {} } as FormEvent)
+    }
+  }, [])
 
   const props = {
     handleSubmit,

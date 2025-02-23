@@ -5,6 +5,7 @@
 
 import { Center, Text3D } from '@react-three/drei'
 import { useControls } from 'leva'
+import { useSearchParams } from 'next/navigation'
 import { Suspense, useCallback, useMemo } from 'react'
 import { MeshStandardMaterial } from 'three'
 
@@ -18,6 +19,19 @@ import Effects from '../mincanvas/effects'
 import CanvasWithModel from '../mincanvas/minicanvas'
 import { generateDarkerPalette, hexToRgb, rgbToHex } from '../util/color'
 
+function setTheme(theme: string) {
+  const meta = document.querySelector('meta[name="theme-color"]')
+  const darker = generateDarkerPalette(hexToRgb(theme))[1]!
+  document.documentElement.style.setProperty('--theme-color', theme)
+  document.documentElement.style.setProperty(
+    '--theme-color-hover',
+    rgbToHex(darker)
+  )
+  if (meta) {
+    meta.setAttribute('content', theme)
+  }
+}
+
 export default function ContributionVisualizer({
   contributions,
   username,
@@ -29,13 +43,15 @@ export default function ContributionVisualizer({
   year: string
   canvasRef: React.MutableRefObject<HTMLCanvasElement>
 }) {
+  const params = useSearchParams()
+
   const font = {
     value: '/fonts/json/Geist_Mono_Regular.json',
     options: {
-      GeistMono: '/fonts/json/Geist_Mono_Regular.json',
-      Grotesque: '/fonts/json/Grotesque_Regular.json',
-      Inter: '/fonts/json/Inter_Bold.json',
-      Monaspace: '/fonts/json/Monaspace_Argon_Bold.json'
+      geistmono: '/fonts/json/Geist_Mono_Regular.json',
+      grotesque: '/fonts/json/Grotesque_Regular.json',
+      inter: '/fonts/json/Inter_Bold.json',
+      monaspace: '/fonts/json/Monaspace_Argon_Bold.json'
     }
   }
 
@@ -47,21 +63,29 @@ export default function ContributionVisualizer({
     }
   }
 
+  const urlTheme = params.get('theme')
+  const urlFont = params.get('font')
+  const urlMaterial = params.get('material')
+  const urlMatcap = params.get('matcap') || 'matcap_16'
+
+  const theme = urlTheme ? `#${urlTheme}` : '#39d353'
+
+  if (urlTheme) {
+    setTheme(theme)
+  }
+
+  if (urlFont && urlFont in font.options) {
+    font.value = font.options[urlFont]
+  }
+
+  if (urlMaterial && urlMaterial in material.options) {
+    material.value = material.options[urlMaterial]
+  }
+
   const { color } = useControls('theme', {
     color: {
-      value: '#39d353',
-      onEditEnd: (value) => {
-        const meta = document.querySelector('meta[name="theme-color"]')
-        const darker = generateDarkerPalette(hexToRgb(value))[1]!
-        document.documentElement.style.setProperty('--theme-color', value)
-        document.documentElement.style.setProperty(
-          '--theme-color-hover',
-          rgbToHex(darker)
-        )
-        if (meta) {
-          meta.setAttribute('content', value)
-        }
-      }
+      value: theme,
+      onEditEnd: (value) => setTheme(value)
     }
   })
 
@@ -100,7 +124,10 @@ export default function ContributionVisualizer({
     [fontMaterialOptions, color]
   )
 
-  const fontMatcapMaterial = useMatcaps({ name: 'theme' })
+  const fontMatcapMaterial = useMatcaps({
+    name: 'theme',
+    defaultMatcap: urlMatcap
+  })
 
   const textMaterial =
     fontMaterialOptions === 'standard' ? fontMaterial : fontMatcapMaterial
@@ -134,7 +161,6 @@ export default function ContributionVisualizer({
       cameraPosition={[0, 50, 0]}
     >
       <Center>
-
         <group name="grid_parent">
           <Suspense fallback={null}>{contributionGrid}</Suspense>
           {contributions.length ? (
@@ -154,7 +180,6 @@ export default function ContributionVisualizer({
         >
           {username}
         </Text3D>
-
         <Text3D
           name={'year'}
           {...textProps}
