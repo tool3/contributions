@@ -32,6 +32,10 @@ $circle-size: 70px;
     transform: translateX(-50%);
   }
 
+  &.hide {
+    display: none;
+  }
+
   .content {
     display: flex;
     flex-direction: column;
@@ -131,7 +135,7 @@ $circle-size: 70px;
     transform: scale(1.05);
     background: var(--theme-color-hover);
   }
-
+  
   svg {
     font-size: 1.5rem;
   }
@@ -140,6 +144,7 @@ $circle-size: 70px;
     top: 5px;
     right: 5px;
   }
+
 }
 
 .selector {

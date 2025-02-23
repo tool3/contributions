@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import gsap from 'gsap'
+import { useSearchParams } from 'next/navigation'
 import { useLayoutEffect, useState } from 'react'
 
 import CaptureSelect from '../capture/capture-select'
@@ -18,6 +19,9 @@ export default function User({
   canvasRef
 }) {
   const [isShrunk, setIsShrunk] = useState(false)
+  const params = useSearchParams()
+  const urlShowMenu = params.get('showMenu')
+  const showMenu = urlShowMenu && urlShowMenu === 'true'
 
   const toggleForm = () => {
     setIsShrunk(!isShrunk)
@@ -55,7 +59,7 @@ export default function User({
     }
   }, [isShrunk])
 
-  return (
+  return showMenu ? (
     <>
       <button className={s.toggleButton} onClick={toggleForm}>
         {isShrunk ? '☰' : '✕'}
@@ -91,5 +95,5 @@ export default function User({
         </div>
       </div>
     </>
-  )
+  ) : null
 }

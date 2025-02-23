@@ -20,15 +20,17 @@ import CanvasWithModel from '../mincanvas/minicanvas'
 import { generateDarkerPalette, hexToRgb, rgbToHex } from '../util/color'
 
 function setTheme(theme: string) {
-  const meta = document.querySelector('meta[name="theme-color"]')
-  const darker = generateDarkerPalette(hexToRgb(theme))[1]!
-  document.documentElement.style.setProperty('--theme-color', theme)
-  document.documentElement.style.setProperty(
-    '--theme-color-hover',
-    rgbToHex(darker)
-  )
-  if (meta) {
-    meta.setAttribute('content', theme)
+  if (typeof window !== 'undefined') {
+    const meta = document.querySelector('meta[name="theme-color"]')
+    const darker = generateDarkerPalette(hexToRgb(theme))[1]!
+    document.documentElement.style.setProperty('--theme-color', theme)
+    document.documentElement.style.setProperty(
+      '--theme-color-hover',
+      rgbToHex(darker)
+    )
+    if (meta) {
+      meta.setAttribute('content', theme)
+    }
   }
 }
 

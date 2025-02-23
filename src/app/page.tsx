@@ -19,7 +19,7 @@ interface Contribution {
   count: number
 }
 
-export default function Page() {
+function MainPage() {
   const [contributions, setContributions] = useState<Contribution[]>([])
   const params = useSearchParams()
   const [username, setUsername] = useState(params.get('username') || '')
@@ -77,7 +77,7 @@ export default function Page() {
   }
 
   return (
-    <Suspense>
+    <>
       <User {...props} />
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
       <ContributionChart
@@ -86,6 +86,14 @@ export default function Page() {
         username={username}
         contributions={contributions}
       />
+    </>
+  )
+}
+
+export default function Page() {
+  return (
+    <Suspense>
+      <MainPage />
     </Suspense>
   )
 }
