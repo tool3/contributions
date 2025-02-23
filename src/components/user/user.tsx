@@ -21,8 +21,7 @@ export default function User({
   const [isShrunk, setIsShrunk] = useState(false)
   const params = useSearchParams()
   const urlShowMenu = params.get('menu')
-  const showMenu = urlShowMenu === undefined ? true : urlShowMenu === 'true'
-
+  const showMenu = urlShowMenu === null ? true : urlShowMenu === 'true'
   const toggleForm = () => {
     setIsShrunk(!isShrunk)
   }
