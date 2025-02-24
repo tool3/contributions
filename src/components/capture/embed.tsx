@@ -6,8 +6,7 @@ export default function EmbedPopup({ onClose, opened, username }) {
   const [copyText, setCopyText] = useState('Copy')
   const [params, setParams] = useState({
     menu: true,
-    username: username || '',
-    theme: ''
+    username: username || ''
   })
 
   const baseUrl = 'https://g3c.vercel.app'
@@ -68,6 +67,15 @@ export default function EmbedPopup({ onClose, opened, username }) {
           <button onClick={onClose} className={styles.closeButton}>
             Close
           </button>
+        </div>
+        <div className={styles.footer}>
+          <a
+            href="https://github.com/tool3/contributions#customization"
+            target="_blank"
+            rel="noopener"
+          >
+            see all customizations options
+          </a>
         </div>
       </div>
     </div>

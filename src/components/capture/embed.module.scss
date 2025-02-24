@@ -21,7 +21,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 17rem;
+  min-height: 19rem;
 }
 
 .textarea {
@@ -81,4 +81,10 @@
       background: rgba(255, 255, 255, 0.1);
     }
   }
+}
+
+
+.footer {
+    font-family: GeistMono;
+    font-size: 12px;
 }
