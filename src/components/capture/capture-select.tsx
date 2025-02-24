@@ -3,11 +3,13 @@ import { useEffect, useRef, useState } from 'react'
 import { getYear } from '~/lib/utils'
 
 import styles from './capture-select.module.scss'
+import EmbedPopup from './embed'
 
 const CaptureSelect = ({ canvasRef, year: baseYear, username }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isEmbedOpen, setEmbedOpen] = useState(false)
   const dropdownRef = useRef(null) as any
-  const options = ['png', 'stl (ascii)', 'stl (binary)']
+  const options = ['embed', 'png', 'stl (ascii)', 'stl (binary)']
   const year = getYear(baseYear)
 
   const handlePNG = () => {
@@ -55,6 +57,21 @@ const CaptureSelect = ({ canvasRef, year: baseYear, username }) => {
           detail: { username, year }
         })
       )
+    } else if (option === 'embed') {
+      setEmbedOpen(true)
+      const value = `
+      <iframe
+		    src="https://g3c.vercel.app?username=${username}&menu=false"
+		    width="100%"
+		    height="100%"
+		    frameborder="0"
+	    />
+      `
+      if ('clipboard' in navigator) {
+        navigator.clipboard
+          .writeText(value)
+          .catch((err) => console.error(err.name, err.message))
+      }
     }
   }
 
@@ -73,6 +90,11 @@ const CaptureSelect = ({ canvasRef, year: baseYear, username }) => {
 
   return (
     <div className={styles.selectWrapper} ref={dropdownRef}>
+      <EmbedPopup
+        username={username}
+        opened={isEmbedOpen}
+        onClose={() => setEmbedOpen(false)}
+      />
       <button className={styles.selectButton} onClick={toggleDropdown}>
         <svg
           className={styles.svg}
@@ -92,7 +114,6 @@ const CaptureSelect = ({ canvasRef, year: baseYear, username }) => {
           />
         </svg>
       </button>
-
       {isOpen && (
         <ul className={styles.dropdown}>
           {options.map((option) => (

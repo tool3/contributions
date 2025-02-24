@@ -74,6 +74,7 @@ export default function User({
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setUsername(e.target.value)
                 }}
+                className={s.input}
                 placeholder="Enter GitHub username"
                 required
               />
