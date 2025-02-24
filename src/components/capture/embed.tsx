@@ -70,7 +70,7 @@ export default function EmbedPopup({ onClose, opened, username }) {
         </div>
         <div className={styles.footer}>
           <a
-            href="https://github.com/tool3/contributions#customization"
+            href="https://github.com/tool3/contributions?tab=readme-ov-file#customizations"
             target="_blank"
             rel="noopener"
           >
