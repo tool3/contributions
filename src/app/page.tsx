@@ -13,7 +13,7 @@ import {
 import User from '~/components/user/user'
 
 import ContributionChart from '../components/chart/chart'
-import s from './page.module.scss';
+import s from './page.module.scss'
 
 interface Contribution {
   date: string
@@ -94,5 +94,9 @@ function MainPage() {
 }
 
 export default function Page() {
-  return <MainPage />
+  return (
+    <Suspense>
+      <MainPage />
+    </Suspense>
+  )
 }
