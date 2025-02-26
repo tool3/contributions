@@ -13,6 +13,7 @@ import {
 import User from '~/components/user/user'
 
 import ContributionChart from '../components/chart/chart'
+import s from './page.module.scss';
 
 interface Contribution {
   date: string
@@ -80,20 +81,18 @@ function MainPage() {
     <>
       <User {...props} />
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      <ContributionChart
-        canvasRef={canvasRef}
-        year={year}
-        username={username}
-        contributions={contributions}
-      />
+      <Suspense fallback={<div className={s.loader}>Loading Textures</div>}>
+        <ContributionChart
+          canvasRef={canvasRef}
+          year={year}
+          username={username}
+          contributions={contributions}
+        />
+      </Suspense>
     </>
   )
 }
 
 export default function Page() {
-  return (
-    <Suspense>
-      <MainPage />
-    </Suspense>
-  )
+  return <MainPage />
 }

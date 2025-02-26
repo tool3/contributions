@@ -3,7 +3,7 @@
 /* eslint-disable react/no-unknown-property */
 'use client'
 
-import { Center, Text3D } from '@react-three/drei'
+import { Center, Html, Text3D } from '@react-three/drei'
 import { useControls } from 'leva'
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useCallback, useMemo } from 'react'
@@ -163,35 +163,41 @@ export default function ContributionVisualizer({
       cameraPosition={[0, 50, 0]}
     >
       <Center>
-        <group name="grid_parent">
-          <Suspense fallback={null}>{contributionGrid}</Suspense>
-          {contributions.length ? (
-            <BaseModel
-              position={[0, 0.8, 0]}
-              rotation={[0, Math.PI, 0]}
-              scale={[65.5, 40, 53]}
-            />
-          ) : null}
-          <Grid color={color} active={contributions.length > 0} />
-        </group>
-        <Text3D
-          name={'username'}
-          {...textProps}
-          position={[-Math.floor(username.length / 2 + offsetText), 0.35, 4.2]}
-          material={textMaterial}
-        >
-          {username}
-        </Text3D>
-        <Text3D
-          name={'year'}
-          {...textProps}
-          height={0.3}
-          size={1}
-          position={[22, 0.5, 4.2]}
-          material={textMaterial}
-        >
-          {yearDisplay}
-        </Text3D>
+        <Suspense fallback={<Html>Loading Textures</Html>}>
+          <group name="grid_parent">
+            {contributionGrid}
+            {contributions.length ? (
+              <BaseModel
+                position={[0, 0.8, 0]}
+                rotation={[0, Math.PI, 0]}
+                scale={[65.5, 40, 53]}
+              />
+            ) : null}
+            <Grid color={color} active={contributions.length > 0} />
+          </group>
+          <Text3D
+            name={'username'}
+            {...textProps}
+            position={[
+              -Math.floor(username.length / 2 + offsetText),
+              0.35,
+              4.2
+            ]}
+            material={textMaterial}
+          >
+            {username}
+          </Text3D>
+          <Text3D
+            name={'year'}
+            {...textProps}
+            height={0.3}
+            size={1}
+            position={[22, 0.5, 4.2]}
+            material={textMaterial}
+          >
+            {yearDisplay}
+          </Text3D>
+        </Suspense>
       </Center>
       <Effects />
     </CanvasWithModel>
