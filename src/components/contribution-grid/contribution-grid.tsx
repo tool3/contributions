@@ -90,6 +90,7 @@ function Bar({ name, material, height, i, position }) {
         ease: 'expo.inOut',
         onUpdate: () => {
           ref.current.position.y = (ref.current.scale.y * height) / 2
+          // ref.current.scale.y = ref.current.scale.y
         }
       })
     }
@@ -165,8 +166,10 @@ export default function ContributionGrid({
       {contributions.map((day, i) => {
         if (!day) return null
         const color = new Color(getColor(day.contributionCount))
-        const height =
-          day.contributionCount > 0 ? day.contributionCount * 0.3 : 0
+
+        const heightValue = day.contributionCount * 0.5
+        const height = day.contributionCount > 0 ? heightValue : 0
+
         const emissiveIntensity = Math.min(1, day.contributionCount / 10)
         const week = Math.floor(i / 7)
         const weekday = i % 7
