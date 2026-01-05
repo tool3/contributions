@@ -35,7 +35,7 @@
     "just-debounce-it": "^3.2.0",
     "leva": "^0.9.34",
     "mousetrap": "1.6.5",
-    "next": "^14.2.3",
+    "next": "14.2.35",
     "postprocessing": "^6.36.6",
     "r3f-perf": "^7.2.3",
     "raw-loader": "^4.0.2",
